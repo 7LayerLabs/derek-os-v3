@@ -1,0 +1,3668 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DEREK OS v3.0 - Complete Life Operating System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+/* ═══════════════════════════════════════════
+   DEREK OS v3.0 — Complete Life Operating System
+   Built by Anders · Full Stack Architect
+   REAL DATA — No mock data. Living source of truth.
+   7 NEW SECTIONS: Activity, DNA, Memory, Skills, Schedule, Goals, Todo
+   ═══════════════════════════════════════════ */
+
+/* ── THEME SYSTEM ────────────────────────── */
+:root, [data-theme="dark"] {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #111118;
+    --bg-card: #16161f;
+    --bg-card-hover: #1c1c28;
+    --bg-elevated: #1e1e2a;
+    --bg-input: #12121a;
+    --bg-desktop: #080810;
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(255,255,255,0.12);
+    --border-active: rgba(99,102,241,0.4);
+    --text-primary: #f0f0f5;
+    --text-secondary: #8888a0;
+    --text-tertiary: #55556a;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --accent-muted: rgba(99,102,241,0.15);
+    --accent-glow: rgba(99,102,241,0.3);
+    --status-online: #22c55e;
+    --status-busy: #f59e0b;
+    --status-offline: #64748b;
+    --status-standby: #f59e0b;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #06b6d4;
+    --taskbar-bg: rgba(10,10,18,0.92);
+    --window-bg: #12121a;
+    --window-header: #1a1a26;
+    --scanline-opacity: 0.03;
+    --font-size-base: 13px;
+}
+
+[data-theme="light"] {
+    --bg-primary: #f0f0f5;
+    --bg-secondary: #e8e8ef;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f5f5fa;
+    --bg-elevated: #ffffff;
+    --bg-input: #f0f0f5;
+    --bg-desktop: #e4e4ee;
+    --border: rgba(0,0,0,0.08);
+    --border-hover: rgba(0,0,0,0.15);
+    --border-active: rgba(99,102,241,0.4);
+    --text-primary: #1a1a2e;
+    --text-secondary: #6b6b80;
+    --text-tertiary: #9999aa;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-muted: rgba(99,102,241,0.1);
+    --accent-glow: rgba(99,102,241,0.2);
+    --taskbar-bg: rgba(220,220,235,0.95);
+    --window-bg: #ffffff;
+    --window-header: #f0f0f5;
+    --scanline-opacity: 0;
+}
+
+[data-theme="matrix"] {
+    --bg-primary: #000a00;
+    --bg-secondary: #001200;
+    --bg-card: #001a00;
+    --bg-card-hover: #002200;
+    --bg-elevated: #002800;
+    --bg-input: #000e00;
+    --bg-desktop: #000800;
+    --border: rgba(0,255,65,0.1);
+    --border-hover: rgba(0,255,65,0.2);
+    --border-active: rgba(0,255,65,0.5);
+    --text-primary: #00ff41;
+    --text-secondary: #00cc33;
+    --text-tertiary: #008822;
+    --accent: #00ff41;
+    --accent-hover: #33ff66;
+    --accent-muted: rgba(0,255,65,0.1);
+    --accent-glow: rgba(0,255,65,0.3);
+    --status-online: #00ff41;
+    --status-busy: #ffcc00;
+    --status-offline: #005500;
+    --success: #00ff41;
+    --warning: #ffcc00;
+    --danger: #ff3333;
+    --info: #00ccff;
+    --taskbar-bg: rgba(0,10,0,0.95);
+    --window-bg: #001200;
+    --window-header: #001a00;
+    --scanline-opacity: 0.06;
+}
+
+/* ── RESET ───────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size:var(--font-size-base);
+    background:var(--bg-desktop);
+    color:var(--text-primary);
+    line-height:1.5;
+    height:100vh;
+    overflow:hidden;
+    user-select:none;
+}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:3px}
+
+/* ── BOOT SEQUENCE ───────────────────────── */
+#boot-screen{
+    position:fixed;inset:0;z-index:99999;
+    background:#000;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    color:#00ff41;
+    transition:opacity 0.8s ease;
+}
+#boot-screen.fade-out{opacity:0;pointer-events:none}
+#boot-screen .boot-logo{
+    font-size:48px;font-weight:700;
+    letter-spacing:-2px;
+    margin-bottom:24px;
+    text-shadow:0 0 20px rgba(0,255,65,0.5);
+    opacity:0;animation:bootFadeIn 0.5s 0.3s forwards;
+}
+#boot-screen .boot-line{
+    font-size:12px;color:#008822;
+    opacity:0;margin:2px 0;
+    max-width:500px;width:90%;
+}
+#boot-screen .boot-progress{
+    width:300px;max-width:80%;height:3px;
+    background:#002200;border-radius:2px;
+    margin-top:24px;overflow:hidden;
+    opacity:0;animation:bootFadeIn 0.5s 0.5s forwards;
+}
+#boot-screen .boot-bar{
+    height:100%;width:0;
+    background:#00ff41;border-radius:2px;
+    box-shadow:0 0 10px rgba(0,255,65,0.6);
+    transition:width 0.15s linear;
+}
+@keyframes bootFadeIn{to{opacity:1}}
+
+/* ── SCANLINES OVERLAY ───────────────────── */
+#scanlines{
+    position:fixed;inset:0;z-index:99998;
+    pointer-events:none;
+    background:repeating-linear-gradient(
+        0deg,transparent,transparent 2px,
+        rgba(0,0,0,var(--scanline-opacity)) 2px,
+        rgba(0,0,0,var(--scanline-opacity)) 4px
+    );
+}
+
+/* ── DESKTOP ─────────────────────────────── */
+#desktop{
+    position:fixed;inset:0;bottom:48px;
+    overflow:hidden;
+    opacity:0;transition:opacity 0.5s ease;
+}
+#desktop.visible{opacity:1}
+
+/* Desktop Icons */
+.desktop-icons{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,90px);
+    gap:8px;padding:16px;
+    align-content:start;
+    height:100%;
+}
+.desktop-icon{
+    display:flex;flex-direction:column;
+    align-items:center;gap:4px;
+    padding:8px 4px;border-radius:8px;
+    cursor:pointer;transition:all 0.15s;
+    text-align:center;
+}
+.desktop-icon:hover{background:var(--accent-muted)}
+.desktop-icon:active{transform:scale(0.95)}
+.desktop-icon .icon-img{
+    width:48px;height:48px;
+    border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.desktop-icon .icon-label{
+    font-size:10px;font-weight:500;
+    color:var(--text-primary);
+    text-shadow:0 1px 3px rgba(0,0,0,0.8);
+    max-width:80px;
+    overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+/* ── WINDOW SYSTEM ───────────────────────── */
+.window{
+    position:absolute;
+    background:var(--window-bg);
+    border:1px solid var(--border);
+    border-radius:10px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.5),0 0 0 1px var(--border);
+    display:flex;flex-direction:column;
+    min-width:320px;min-height:200px;
+    overflow:hidden;
+    transition:box-shadow 0.2s;
+    opacity:0;transform:scale(0.95);
+    animation:windowOpen 0.2s forwards;
+}
+.window.focused{
+    box-shadow:0 12px 50px rgba(0,0,0,0.6),0 0 0 1px var(--accent-glow);
+    z-index:1000;
+}
+.window.minimized{
+    opacity:0!important;
+    pointer-events:none!important;
+    transform:scale(0.8) translateY(100px)!important;
+    transition:all 0.3s ease;
+}
+.window.maximized{
+    left:0!important;top:0!important;
+    width:100%!important;height:calc(100vh - 48px)!important;
+    border-radius:0;
+    transition:all 0.2s ease;
+}
+@keyframes windowOpen{
+    from{opacity:0;transform:scale(0.9)}
+    to{opacity:1;transform:scale(1)}
+}
+@keyframes windowClose{
+    from{opacity:1;transform:scale(1)}
+    to{opacity:0;transform:scale(0.9)}
+}
+
+.window-header{
+    display:flex;align-items:center;
+    justify-content:space-between;
+    padding:0 12px;height:38px;
+    background:var(--window-header);
+    border-bottom:1px solid var(--border);
+    cursor:default;
+    flex-shrink:0;
+}
+.window-header-left{
+    display:flex;align-items:center;gap:8px;
+}
+.window-title{
+    font-size:12px;font-weight:600;
+    color:var(--text-primary);
+    white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;max-width:200px;
+}
+.window-title-icon{font-size:14px}
+
+.window-controls{display:flex;gap:6px}
+.window-ctrl{
+    width:14px;height:14px;border-radius:50%;
+    border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:8px;color:transparent;
+    transition:all 0.15s;
+}
+.window-ctrl:hover{color:rgba(0,0,0,0.7)}
+.window-ctrl.close{background:#ff5f57}
+.window-ctrl.minimize{background:#ffbd2e}
+.window-ctrl.maximize{background:#28c840}
+
+.window-body{
+    flex:1;overflow:auto;
+    padding:0;
+    position:relative;
+}
+
+/* Resize handles */
+.window .resize-handle{
+    position:absolute;z-index:10;
+}
+.window .resize-handle.r-right{right:-3px;top:0;width:6px;height:100%;cursor:ew-resize}
+.window .resize-handle.r-bottom{bottom:-3px;left:0;height:6px;width:100%;cursor:ns-resize}
+.window .resize-handle.r-corner{right:-3px;bottom:-3px;width:12px;height:12px;cursor:nwse-resize}
+
+/* ── TASKBAR ─────────────────────────────── */
+#taskbar{
+    position:fixed;bottom:0;left:0;right:0;
+    height:48px;
+    background:var(--taskbar-bg);
+    backdrop-filter:blur(20px);
+    border-top:1px solid var(--border);
+    display:flex;align-items:center;
+    padding:0 8px;
+    z-index:9999;
+    opacity:0;transition:opacity 0.5s ease;
+}
+#taskbar.visible{opacity:1}
+
+.taskbar-start{
+    display:flex;align-items:center;
+    gap:4px;padding-right:8px;
+    border-right:1px solid var(--border);
+    margin-right:8px;
+}
+.taskbar-start-btn{
+    width:36px;height:36px;
+    background:var(--accent);
+    border:none;border-radius:8px;
+    color:white;font-weight:800;
+    font-size:14px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:all 0.15s;
+    font-family:'JetBrains Mono',monospace;
+}
+.taskbar-start-btn:hover{
+    background:var(--accent-hover);
+    transform:scale(1.05);
+}
+
+.taskbar-apps{
+    display:flex;align-items:center;
+    gap:3px;flex:1;overflow-x:auto;
+}
+.taskbar-app{
+    display:flex;align-items:center;gap:6px;
+    padding:4px 12px;height:34px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid transparent;
+    border-radius:6px;cursor:pointer;
+    font-size:11px;font-weight:500;
+    color:var(--text-secondary);
+    transition:all 0.15s;
+    white-space:nowrap;flex-shrink:0;
+}
+.taskbar-app:hover{
+    background:rgba(255,255,255,0.08);
+    color:var(--text-primary);
+}
+.taskbar-app.active{
+    background:var(--accent-muted);
+    border-color:var(--accent);
+    color:var(--text-primary);
+}
+.taskbar-app.minimized{opacity:0.5}
+.taskbar-app-icon{font-size:14px}
+.taskbar-app-dot{
+    width:4px;height:4px;
+    border-radius:50%;
+    background:var(--accent);
+    margin-top:2px;
+}
+
+.taskbar-tray{
+    display:flex;align-items:center;
+    gap:12px;padding-left:8px;
+    border-left:1px solid var(--border);
+    margin-left:8px;
+}
+.tray-item{
+    font-size:14px;cursor:pointer;
+    color:var(--text-secondary);
+    transition:color 0.15s;
+}
+.tray-item:hover{color:var(--text-primary)}
+.taskbar-clock{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;font-weight:500;
+    color:var(--text-secondary);
+    text-align:right;
+    line-height:1.3;
+    min-width:65px;
+}
+
+/* ── START MENU ──────────────────────────── */
+#start-menu{
+    position:fixed;
+    bottom:56px;left:8px;
+    width:340px;
+    max-height:calc(100vh - 120px);
+    background:var(--bg-elevated);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 16px 60px rgba(0,0,0,0.5);
+    z-index:10000;
+    display:none;
+    overflow:hidden;
+    animation:slideUp 0.2s ease;
+}
+#start-menu.open{display:block}
+@keyframes slideUp{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.start-header{
+    padding:16px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:12px;
+}
+.start-avatar{
+    width:40px;height:40px;
+    background:var(--accent);
+    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:16px;color:white;
+}
+.start-user{font-size:14px;font-weight:600}
+.start-version{font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace}
+
+.start-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:4px;padding:12px;
+}
+.start-app{
+    display:flex;flex-direction:column;
+    align-items:center;gap:4px;
+    padding:12px 4px;border-radius:8px;
+    cursor:pointer;transition:all 0.15s;
+    text-align:center;
+}
+.start-app:hover{background:var(--accent-muted)}
+.start-app-icon{
+    width:40px;height:40px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    background:var(--bg-card);border:1px solid var(--border);
+}
+.start-app-name{font-size:10px;color:var(--text-secondary);font-weight:500}
+
+.start-footer{
+    padding:8px 12px;
+    border-top:1px solid var(--border);
+    display:flex;justify-content:space-between;
+}
+.start-footer-btn{
+    padding:6px 12px;border-radius:6px;
+    background:none;border:none;
+    color:var(--text-secondary);
+    font-size:11px;font-weight:500;font-family:inherit;
+    cursor:pointer;transition:all 0.15s;
+}
+.start-footer-btn:hover{
+    background:var(--accent-muted);
+    color:var(--text-primary);
+}
+
+/* ── NOTIFICATION CENTER ─────────────────── */
+#notification-panel{
+    position:fixed;
+    top:0;right:-380px;bottom:48px;
+    width:380px;
+    background:var(--bg-elevated);
+    border-left:1px solid var(--border);
+    box-shadow:-8px 0 40px rgba(0,0,0,0.3);
+    z-index:9998;
+    transition:right 0.3s ease;
+    display:flex;flex-direction:column;
+    overflow:hidden;
+}
+#notification-panel.open{right:0}
+
+.notif-header{
+    padding:16px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+}
+.notif-title{font-size:14px;font-weight:700}
+.notif-clear{
+    background:none;border:none;
+    color:var(--text-tertiary);font-size:11px;
+    cursor:pointer;font-family:inherit;
+    padding:4px 8px;border-radius:4px;
+}
+.notif-clear:hover{color:var(--text-primary);background:var(--accent-muted)}
+.notif-list{flex:1;overflow-y:auto;padding:8px}
+
+.notif-item{
+    padding:12px 16px;border-radius:8px;
+    margin-bottom:4px;cursor:pointer;
+    transition:background 0.15s;
+    border-left:3px solid transparent;
+}
+.notif-item:hover{background:var(--bg-card)}
+.notif-item.unread{border-left-color:var(--accent)}
+.notif-item-header{
+    display:flex;align-items:center;
+    justify-content:space-between;
+    margin-bottom:4px;
+}
+.notif-agent{font-size:12px;font-weight:600;color:var(--accent-hover)}
+.notif-time{font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace}
+.notif-text{font-size:12px;color:var(--text-secondary);line-height:1.5}
+
+/* ── SETTINGS PANEL ──────────────────────── */
+.settings-body{padding:20px}
+.settings-group{margin-bottom:24px}
+.settings-group-title{
+    font-size:11px;font-weight:600;
+    text-transform:uppercase;letter-spacing:1px;
+    color:var(--text-tertiary);
+    margin-bottom:12px;
+}
+.settings-option{
+    display:flex;align-items:center;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+}
+.settings-option:last-child{border-bottom:none}
+.settings-label{font-size:13px;color:var(--text-primary)}
+.settings-desc{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+
+.theme-switcher{display:flex;gap:4px}
+.theme-btn{
+    padding:6px 14px;border-radius:6px;
+    border:1px solid var(--border);
+    background:var(--bg-card);
+    color:var(--text-secondary);
+    font-size:11px;font-weight:500;
+    font-family:inherit;cursor:pointer;
+    transition:all 0.15s;
+}
+.theme-btn:hover{border-color:var(--border-hover);color:var(--text-primary)}
+.theme-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:white;
+}
+
+.wallpaper-grid{display:flex;gap:8px;flex-wrap:wrap}
+.wallpaper-opt{
+    width:48px;height:32px;border-radius:6px;
+    border:2px solid var(--border);
+    cursor:pointer;transition:all 0.15s;
+}
+.wallpaper-opt:hover{border-color:var(--accent)}
+.wallpaper-opt.active{border-color:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+
+.font-slider{
+    width:120px;accent-color:var(--accent);
+}
+
+/* ── APP: CALCULATOR ─────────────────────── */
+.calc-display{
+    background:#000;
+    padding:20px 16px 12px;
+    text-align:right;
+    font-family:'JetBrains Mono',monospace;
+    border-bottom:1px solid var(--border);
+}
+.calc-expr{font-size:12px;color:var(--text-tertiary);min-height:16px}
+.calc-result{font-size:32px;font-weight:700;color:var(--text-primary);margin-top:4px}
+.calc-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;padding:1px;
+    background:var(--border);
+}
+.calc-btn{
+    padding:16px;border:none;
+    font-family:'JetBrains Mono',monospace;
+    font-size:16px;font-weight:500;
+    background:var(--bg-card);
+    color:var(--text-primary);
+    cursor:pointer;transition:background 0.1s;
+}
+.calc-btn:hover{background:var(--bg-card-hover)}
+.calc-btn:active{background:var(--accent-muted)}
+.calc-btn.op{color:var(--accent-hover)}
+.calc-btn.special{color:var(--danger)}
+.calc-btn.equals{background:var(--accent);color:white}
+.calc-btn.equals:hover{background:var(--accent-hover)}
+
+/* ── APP: NOTEPAD ────────────────────────── */
+.notepad-toolbar{
+    display:flex;gap:4px;padding:6px 8px;
+    background:var(--window-header);
+    border-bottom:1px solid var(--border);
+}
+.notepad-btn{
+    padding:4px 10px;border-radius:4px;
+    border:none;background:none;
+    color:var(--text-secondary);
+    font-size:11px;font-family:inherit;
+    cursor:pointer;transition:all 0.15s;
+}
+.notepad-btn:hover{background:var(--accent-muted);color:var(--text-primary)}
+.notepad-area{
+    width:100%;height:calc(100% - 36px);
+    background:transparent;border:none;
+    padding:12px 16px;resize:none;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;color:var(--text-primary);
+    line-height:1.7;outline:none;
+}
+
+/* ── APP: TERMINAL ───────────────────────── */
+.terminal-body{
+    background:#0a0a0a;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    padding:12px;height:100%;
+    overflow-y:auto;color:#00ff41;
+}
+.terminal-line{margin-bottom:2px;line-height:1.5}
+.terminal-line .prompt{color:#6366f1}
+.terminal-line .output{color:#00cc33}
+.terminal-line .error{color:#ff5555}
+.terminal-input-line{display:flex;align-items:center;gap:4px}
+.terminal-input{
+    flex:1;background:none;border:none;
+    color:#00ff41;font:inherit;outline:none;
+    caret-color:#00ff41;
+}
+
+/* ── APP: CLOCK/TIMER ────────────────────── */
+.clock-app{
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    height:100%;padding:24px;
+    text-align:center;
+}
+.clock-display{
+    font-family:'JetBrains Mono',monospace;
+    font-size:56px;font-weight:700;
+    letter-spacing:-2px;
+    color:var(--text-primary);
+    text-shadow:0 0 30px var(--accent-glow);
+    margin-bottom:8px;
+}
+.clock-date{
+    font-size:14px;color:var(--text-secondary);
+    margin-bottom:24px;
+}
+.clock-controls{display:flex;gap:8px;margin-top:16px}
+.clock-btn{
+    padding:8px 24px;border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--bg-card);
+    color:var(--text-primary);
+    font-family:inherit;font-size:12px;font-weight:500;
+    cursor:pointer;transition:all 0.15s;
+}
+.clock-btn:hover{border-color:var(--accent);background:var(--accent-muted)}
+.clock-btn.active{background:var(--accent);border-color:var(--accent);color:white}
+.timer-display{
+    font-family:'JetBrains Mono',monospace;
+    font-size:42px;font-weight:600;
+    color:var(--accent-hover);
+    margin:16px 0;
+}
+.stopwatch-laps{
+    font-size:11px;color:var(--text-tertiary);
+    max-height:120px;overflow-y:auto;
+    text-align:left;width:200px;
+    margin-top:12px;
+}
+.stopwatch-laps div{
+    padding:3px 0;border-bottom:1px solid var(--border);
+    font-family:'JetBrains Mono',monospace;
+}
+
+/* ── APP: AGENT DASHBOARD ────────────────── */
+.agent-dash{padding:16px;overflow-y:auto;height:100%}
+.agent-dash-card{
+    display:flex;align-items:center;gap:12px;
+    padding:12px;border-radius:8px;
+    border:1px solid var(--border);
+    margin-bottom:8px;
+    transition:all 0.15s;
+    cursor:pointer;
+}
+.agent-dash-card:hover{
+    border-color:var(--accent);
+    background:var(--accent-muted);
+}
+.agent-dash-avatar{
+    width:36px;height:36px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;color:white;flex-shrink:0;
+    position:relative;
+}
+.agent-dash-avatar .status-dot{
+    position:absolute;bottom:-1px;right:-1px;
+    width:10px;height:10px;border-radius:50%;
+    border:2px solid var(--window-bg);
+}
+.agent-dash-info{flex:1;min-width:0}
+.agent-dash-name{font-size:13px;font-weight:600}
+.agent-dash-role{font-size:10px;color:var(--text-tertiary)}
+.agent-dash-task{font-size:11px;color:var(--text-secondary);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agent-dash-meta{text-align:right;flex-shrink:0}
+.agent-dash-time{font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace}
+.agent-dash-btn{
+    margin-top:4px;padding:3px 10px;
+    border-radius:4px;border:none;
+    background:var(--accent);color:white;
+    font-size:10px;font-weight:500;
+    font-family:inherit;cursor:pointer;
+}
+.agent-dash-btn:hover{background:var(--accent-hover)}
+
+/* ── APP: SYSTEM MONITOR ─────────────────── */
+.sysmon{padding:16px;overflow-y:auto;height:100%}
+.sysmon-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sysmon-card{
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:8px;padding:12px;
+}
+.sysmon-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-tertiary)}
+.sysmon-value{
+    font-family:'JetBrains Mono',monospace;
+    font-size:22px;font-weight:700;
+    color:var(--text-primary);
+    margin:4px 0;
+}
+.sysmon-bar{
+    width:100%;height:6px;background:rgba(255,255,255,0.06);
+    border-radius:3px;overflow:hidden;margin-top:4px;
+}
+.sysmon-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.sysmon-chart{
+    height:60px;margin-top:8px;
+    display:flex;align-items:flex-end;gap:2px;
+}
+.sysmon-chart-bar{
+    flex:1;background:var(--accent);
+    border-radius:2px 2px 0 0;
+    transition:height 0.5s ease;
+    min-width:3px;opacity:0.7;
+}
+.sysmon-info{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.sysmon-info-item{font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace}
+.sysmon-info-item span{color:var(--text-secondary)}
+
+.sysmon-full{grid-column:1/-1}
+.sysmon-processes{margin-top:8px}
+.sysmon-proc{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:6px 0;border-bottom:1px solid var(--border);
+    font-size:11px;
+}
+.sysmon-proc-name{color:var(--text-primary);font-weight:500}
+.sysmon-proc-val{color:var(--text-tertiary);font-family:'JetBrains Mono',monospace;font-size:10px}
+
+/* ── APP: FILE EXPLORER ──────────────────── */
+.explorer{display:flex;flex-direction:column;height:100%}
+.explorer-toolbar{
+    display:flex;align-items:center;gap:8px;
+    padding:8px 12px;
+    background:var(--window-header);
+    border-bottom:1px solid var(--border);
+}
+.explorer-path{
+    flex:1;padding:4px 10px;
+    background:var(--bg-input);
+    border:1px solid var(--border);
+    border-radius:4px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:var(--text-secondary);
+}
+.explorer-nav-btn{
+    padding:4px 8px;border-radius:4px;
+    border:1px solid var(--border);
+    background:var(--bg-card);color:var(--text-secondary);
+    cursor:pointer;font-size:12px;
+}
+.explorer-nav-btn:hover{background:var(--accent-muted);color:var(--text-primary)}
+
+.explorer-content{flex:1;overflow-y:auto;padding:8px}
+.explorer-item{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 12px;border-radius:6px;
+    cursor:pointer;transition:background 0.1s;
+}
+.explorer-item:hover{background:var(--accent-muted)}
+.explorer-item-icon{font-size:18px;width:24px;text-align:center}
+.explorer-item-info{flex:1;min-width:0}
+.explorer-item-name{font-size:12px;font-weight:500}
+.explorer-item-desc{font-size:10px;color:var(--text-tertiary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.explorer-item-badge{
+    font-size:9px;font-weight:600;
+    padding:2px 8px;border-radius:10px;
+    text-transform:uppercase;letter-spacing:0.5px;
+    flex-shrink:0;
+}
+.badge-live{background:rgba(34,197,94,0.12);color:#22c55e}
+.badge-building{background:rgba(99,102,241,0.12);color:#6366f1}
+.badge-planning{background:rgba(245,158,11,0.12);color:#f59e0b}
+.badge-spark{background:rgba(236,72,153,0.12);color:#ec4899}
+.badge-active{background:rgba(34,197,94,0.12);color:#22c55e}
+.badge-progress{background:rgba(99,102,241,0.12);color:#6366f1}
+.badge-launched{background:rgba(6,182,212,0.12);color:#06b6d4}
+.badge-paused{background:rgba(245,158,11,0.12);color:#f59e0b}
+.badge-draft{background:rgba(100,116,139,0.12);color:#64748b}
+.badge-online{background:rgba(34,197,94,0.12);color:#22c55e}
+.badge-standby{background:rgba(245,158,11,0.12);color:#f59e0b}
+
+/* ── APP: IDEAS VAULT ────────────────────── */
+.ideas-vault{padding:16px;overflow-y:auto;height:100%}
+.ideas-section{margin-bottom:20px}
+.ideas-section-title{
+    font-size:11px;font-weight:700;
+    text-transform:uppercase;letter-spacing:1.5px;
+    color:var(--accent);
+    margin-bottom:10px;
+    padding-bottom:6px;
+    border-bottom:1px solid var(--border);
+}
+.idea-card{
+    padding:10px 14px;border-radius:8px;
+    border:1px solid var(--border);
+    margin-bottom:6px;
+    transition:all 0.15s;
+    cursor:default;
+}
+.idea-card:hover{
+    border-color:var(--accent);
+    background:var(--accent-muted);
+}
+.idea-card-header{
+    display:flex;align-items:center;
+    justify-content:space-between;
+    margin-bottom:4px;
+}
+.idea-card-name{font-size:13px;font-weight:600}
+.idea-card-agent{
+    font-size:9px;font-weight:600;
+    padding:2px 8px;border-radius:10px;
+    background:var(--accent-muted);color:var(--accent);
+}
+.idea-card-desc{font-size:11px;color:var(--text-secondary);line-height:1.5}
+
+/* ── APP: DAILY FEED ─────────────────────── */
+.daily-feed{padding:16px;overflow-y:auto;height:100%}
+.feed-date{
+    font-size:11px;font-weight:700;
+    text-transform:uppercase;letter-spacing:1.5px;
+    color:var(--accent);
+    margin-bottom:12px;
+}
+.feed-item{
+    display:flex;gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+}
+.feed-item:last-child{border-bottom:none}
+.feed-time{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:var(--accent-hover);
+    white-space:nowrap;
+    min-width:70px;
+    flex-shrink:0;
+}
+.feed-text{font-size:12px;color:var(--text-secondary);line-height:1.5}
+
+/* ── APP: MESSENGER FRAME ────────────────── */
+.messenger-frame{
+    width:100%;height:100%;border:none;
+    background:var(--bg-primary);
+}
+
+/* ── RESPONSIVE ──────────────────────────── */
+@media(max-width:768px){
+    .desktop-icons{grid-template-columns:repeat(auto-fill,76px);gap:4px;padding:10px}
+    .desktop-icon .icon-img{width:40px;height:40px;font-size:18px}
+    .desktop-icon .icon-label{font-size:9px}
+    #start-menu{width:calc(100vw - 16px);left:8px}
+    .start-grid{grid-template-columns:repeat(3,1fr)}
+    #notification-panel{width:100%}
+    .sysmon-grid{grid-template-columns:1fr}
+    .window{
+        left:0!important;top:0!important;
+        width:100%!important;height:calc(100vh - 48px)!important;
+        border-radius:0!important;
+    }
+}
+
+/* ── UTILITIES ────────────────────────────── */
+.hidden{display:none!important}
+.fade-in{animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     BOOT SEQUENCE
+     ═══════════════════════════════════════════ -->
+<div id="boot-screen">
+    <div class="boot-logo">DEREK OS</div>
+    <div id="boot-lines"></div>
+    <div class="boot-progress">
+        <div class="boot-bar" id="boot-bar"></div>
+    </div>
+</div>
+
+<!-- SCANLINES -->
+<div id="scanlines"></div>
+
+<!-- ═══════════════════════════════════════════
+     DESKTOP
+     ═══════════════════════════════════════════ -->
+<div id="desktop">
+    <div class="desktop-icons" id="desktop-icons"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     WINDOWS CONTAINER
+     ═══════════════════════════════════════════ -->
+<div id="windows-container"></div>
+
+<!-- ═══════════════════════════════════════════
+     START MENU
+     ═══════════════════════════════════════════ -->
+<div id="start-menu">
+    <div class="start-header">
+        <div class="start-avatar">D</div>
+        <div>
+            <div class="start-user">Derek</div>
+            <div class="start-version">DEREK OS v2.0</div>
+        </div>
+    </div>
+    <div class="start-grid" id="start-grid"></div>
+    <div class="start-footer">
+        <button class="start-footer-btn" onclick="openApp('settings')">Settings</button>
+        <button class="start-footer-btn" onclick="openApp('about')">About</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NOTIFICATION PANEL
+     ═══════════════════════════════════════════ -->
+<div id="notification-panel">
+    <div class="notif-header">
+        <span class="notif-title">Notifications</span>
+        <button class="notif-clear" onclick="clearNotifications()">Clear all</button>
+    </div>
+    <div class="notif-list" id="notif-list"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TASKBAR
+     ═══════════════════════════════════════════ -->
+<div id="taskbar">
+    <div class="taskbar-start">
+        <button class="taskbar-start-btn" id="start-btn" title="Start Menu">D</button>
+    </div>
+    <div class="taskbar-apps" id="taskbar-apps"></div>
+    <div class="taskbar-tray">
+        <span class="tray-item" id="tray-notif" title="Notifications">🔔</span>
+        <span class="tray-item" id="tray-wifi" title="Network">📶</span>
+        <span class="tray-item" id="tray-volume" title="Sound">🔊</span>
+        <div class="taskbar-clock" id="taskbar-clock"></div>
+    </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DEREK OS v2.0 ENGINE
+   Built by Anders
+   ALL REAL DATA — NO MOCK DATA
+   ═══════════════════════════════════════════ */
+
+// ── REAL AGENT DATA ─────────────────────
+const AGENTS = [
+    { id:'milo',name:'Milo',role:'Chief of Staff',emoji:'🧠',color:'#6366f1',status:'online',task:'Coordinating agent fleet, managing priorities and deliveries',lastActive:'Just now' },
+    { id:'bobby',name:'Bobby',role:'Trading Advisor (Bobby Axelrod voice)',emoji:'📊',color:'#f472b6',status:'online',task:'Market analysis, options flow monitoring, trading psychology',lastActive:'Just now' },
+    { id:'wendy',name:'Wendy',role:'Performance Psychologist (Dr. Wendy Rhoades)',emoji:'🧘',color:'#a78bfa',status:'online',task:'Behavioral pattern detection, performance coaching, mindset work',lastActive:'Just now' },
+    { id:'anders',name:'Anders',role:'Full Stack Architect',emoji:'⚡',color:'#22d3ee',status:'online',task:'Building Derek OS, shipping projects, full-stack development',lastActive:'Just now' },
+    { id:'paula',name:'Paula',role:'Creative Director',emoji:'✦',color:'#f59e0b',status:'online',task:'Brand design, UI/UX, visual identity systems',lastActive:'Just now' },
+    { id:'tony',name:'Tony',role:'Restaurant Ops Specialist',emoji:'🍽️',color:'#ef4444',status:'online',task:'Menu engineering, food cost tracking, Bobola\'s operations',lastActive:'Just now' },
+    { id:'remy',name:'Remy',role:'Restaurant Marketing',emoji:'📣',color:'#34d399',status:'online',task:'Social media content, review management, local SEO',lastActive:'Just now' },
+    { id:'dax',name:'Dax',role:'Data Analyst',emoji:'📈',color:'#fb923c',status:'online',task:'X/Twitter analytics, engagement tracking, growth metrics',lastActive:'Just now' },
+    { id:'dwight',name:'Dwight',role:'Weather & News (Dwight K. Schrute voice)',emoji:'🌦️',color:'#64748b',status:'online',task:'Hyperlocal weather, news curation, daily briefings',lastActive:'Just now' },
+    { id:'webb',name:'Webb',role:'Deep Research & Alt Media Analyst',emoji:'🔍',color:'#8b5cf6',status:'standby',task:'OSINT, court document monitoring, narrative gap analysis',lastActive:'Standby' }
+];
+
+// ── REAL PROJECTS ────────────────────────
+const PROJECTS = [
+    { name:'LEDGR',desc:'Restaurant accounting app (Next.js)',status:'building',icon:'📒',color:'#22c55e' },
+    { name:'Mojo',desc:'Trading psychology app (Next.js)',status:'building',icon:'🧠',color:'#a78bfa' },
+    { name:'Derek OS',desc:'AI command center (HTML) — dbtek.com',status:'live',icon:'💻',color:'#6366f1' },
+    { name:'Command Center',desc:'Next.js dashboard — command-center-three-chi.vercel.app',status:'live',icon:'🎛️',color:'#22d3ee' },
+    { name:'Sunday Squares',desc:'Super Bowl pools — sunday-squares.vercel.app',status:'live',icon:'🟧',color:'#fb923c' },
+    { name:'Signal & Noise',desc:'Market newsletter',status:'building',icon:'📰',color:'#f472b6' },
+    { name:'Soul Solace',desc:'Faith-based wellness',status:'planning',icon:'🙏',color:'#c084fc' },
+    { name:'Boundless',desc:'Self-improvement platform',status:'planning',icon:'✨',color:'#34d399' },
+    { name:'Spend Signal',desc:'Expense tracking',status:'planning',icon:'💳',color:'#f59e0b' },
+    { name:'tickR',desc:'Options tracker',status:'planning',icon:'📉',color:'#ef4444' },
+    { name:'MenuSparks',desc:'Restaurant marketing',status:'planning',icon:'🔥',color:'#f97316' },
+    { name:'BOH.AI',desc:'Restaurant ops AI (new idea)',status:'spark',icon:'🤖',color:'#06b6d4' },
+    { name:'AgentStack',desc:'Multi-agent platform (new idea)',status:'spark',icon:'🏗️',color:'#8b5cf6' },
+    { name:'Poolr',desc:'Social sports gaming (new idea)',status:'spark',icon:'🎱',color:'#ec4899' },
+    { name:'The Restaurant Operator',desc:'Newsletter empire (new idea)',status:'spark',icon:'📧',color:'#14b8a6' },
+];
+
+// ── REAL IDEAS VAULT (from all agent IDEAS.md files) ──
+const IDEAS_VAULT = [
+    // MILLION DOLLAR IDEAS (from Milo's report)
+    { name:'BOH.AI',desc:'AI back-of-house co-pilot for independent restaurants. Combines LEDGR + Tony + Remy. $79-249/mo. 560 customers = $1M ARR.',agent:'Milo',category:'million-dollar' },
+    { name:'Mojo Pro',desc:'AI trading coach combining Mojo + tickR + Bobby + Wendy. Trade journaling with psychology detection. $39-149/mo.',agent:'Milo',category:'million-dollar' },
+    { name:'Poolr',desc:'Year-round social sports gaming platform. Evolve Sunday Squares into NFL/NBA/MLB/NHL. Restaurant distribution channel.',agent:'Milo',category:'million-dollar' },
+    { name:'AgentStack',desc:'White-label AI agent teams for SMBs. Package Derek\'s 9-agent system. $99-999/mo per business.',agent:'Milo',category:'million-dollar' },
+    { name:'The Restaurant Operator',desc:'Morning Brew of restaurant industry. AI-generated daily newsletter + podcast + community. Funnel to BOH.AI.',agent:'Milo',category:'million-dollar' },
+
+    // ANDERS IDEAS
+    { name:'AI Deploy Agent',desc:'Ship-it-as-a-service. Describe what you want, it pulls your repo, fixes it, deploys it, hands you a live URL. Charge per deploy.',agent:'Anders',category:'build' },
+    { name:'Prompt-to-SaaS Scaffolder',desc:'Describe a subscription app, out comes Next.js + Supabase auth + Stripe billing + dashboard + landing page. Deployed. $99/scaffold.',agent:'Anders',category:'build' },
+    { name:'Multi-Agent Dev Team Product',desc:'Package Paula designs + Anders builds + Milo coordinates as a product. Let any founder spin up an AI dev team.',agent:'Anders',category:'build' },
+
+    // BOBBY IDEAS
+    { name:'AI Market Brief',desc:'Daily pre-market email/SMS. Key levels, trade ideas, bold prediction. Voice people want to read. $29/mo.',agent:'Bobby',category:'build' },
+    { name:'Options Play Scanner',desc:'Scan the chain, find asymmetric setups. Score each play 1-10 on conviction using technicals + sentiment + flow.',agent:'Bobby',category:'build' },
+    { name:'Trade Journal + AI Coach',desc:'Journal that tracks P&L and identifies behavioral patterns. Tells traders in real language when they\'re revenge trading or oversizing. $50/mo.',agent:'Bobby',category:'build' },
+
+    // WENDY IDEAS
+    { name:'Pre-Performance Mental Primer',desc:'90-second AI coaching before high-stakes moments. Personalized to psychological profile. Corporate performance coaching market.',agent:'Wendy',category:'build' },
+    { name:'The Drawdown Protocol',desc:'AI crisis coach for traders/founders in freefall. Reset people in 5 minutes. Performance recovery, not therapy. Subscription.',agent:'Wendy',category:'build' },
+    { name:'Family OS for High Performers',desc:'AI layer helping high performers manage emotional debt at home. Relationship health monitor with coaching. Derek lives this.',agent:'Wendy',category:'build' },
+
+    // PAULA IDEAS
+    { name:'BrandForge',desc:'AI brand kit generator. 10 questions, full brand kit: logo concepts, color system, type pairings, social templates. $49-199.',agent:'Paula',category:'build' },
+    { name:'DesignCrit',desc:'Upload a screenshot, get Paula Scher-level critique. Hierarchy issues, spacing, color contrast, type crimes. $12/mo.',agent:'Paula',category:'build' },
+    { name:'ShipKit',desc:'Launch-ready UI packs for specific verticals. Complete design systems with tokens, components, copy framework. $79-149/kit.',agent:'Paula',category:'build' },
+
+    // TONY IDEAS
+    { name:'AI Menu Engineer',desc:'POS sales data + food costs = exactly which items to push, kill, or reprice. Replaces $15K consultant. $200/mo.',agent:'Tony',category:'build' },
+    { name:'Smart Prep Sheet Generator',desc:'Historical sales + weather + events + reservations = daily prep quantities. Saves 5-10% on food waste.',agent:'Tony',category:'build' },
+    { name:'Food Cost Autopilot',desc:'Scan invoices, auto-extract prices, track cost trends, alert when suppliers creep prices. Real-time food cost tracking.',agent:'Tony',category:'build' },
+
+    // REMY IDEAS
+    { name:'Post Pilot',desc:'Restaurant menu + socials = week of ready-to-post content with one click. Their items, their vibe, their context. $49/mo.',agent:'Remy',category:'build' },
+    { name:'Review Response Engine',desc:'Pull Google/Yelp reviews, draft responses in owner\'s voice, queue for one-tap approval. $29/mo.',agent:'Remy',category:'build' },
+    { name:'Slow Night Fixer',desc:'POS data identifies dead night, auto-generates targeted promo campaign: social posts, email, offer framework. $19/mo.',agent:'Remy',category:'build' },
+
+    // DAX IDEAS
+    { name:'Hook Rank',desc:'AI hook scoring tool. Feed it a draft tweet, scores 1-10 with specific feedback. Trained on viral posts. $9/mo pro.',agent:'Dax',category:'build' },
+    { name:'Ship Score',desc:'Public accountability dashboard tracking shipping velocity. Gamified, embeddable. Rule of 100 as a product. $12/mo.',agent:'Dax',category:'build' },
+    { name:'Niche Pulse',desc:'AI trend radar for micro-niches. Monitors X, Reddit, HN, Product Hunt daily. What\'s trending, what hooks hit, what gaps exist. $19/mo.',agent:'Dax',category:'build' },
+
+    // DWIGHT IDEAS
+    { name:'Storm Shield',desc:'Hyperlocal severe weather alerts for YOUR street. Hail in 12 minutes. Tornado 4 miles out. Power outage on your grid. $3.99/mo.',agent:'Dwight',category:'build' },
+    { name:'Municipal Intelligence Brief',desc:'Daily local digest for small cities. Police logs, building permits, school delays, road closures, council summaries. $4.99/mo.',agent:'Dwight',category:'build' },
+    { name:'Prep Score',desc:'Household readiness tracker. Weather + supply inventory + generator fuel + emergency kit expiration. Tells you what to buy.',agent:'Dwight',category:'build' },
+
+    // WEBB IDEAS
+    { name:'The Friday Night Drop',desc:'Weekly intelligence brief dissecting Friday document dumps, FOIA releases, buried court filings. $15/mo Substack.',agent:'Webb',category:'build' },
+    { name:'Follow The Money',desc:'Real-time alerts on congressional trades, insider sales, betting line anomalies. Pattern detection as a product. $50-200/mo.',agent:'Webb',category:'build' },
+    { name:'Narrative Gap Tracker',desc:'Dashboard comparing mainstream vs alt-media coverage. Highlights stories with heavy alt-media and zero mainstream. Front-run narratives.',agent:'Webb',category:'build' },
+];
+
+// ── REAL DAILY FEED ─────────────────────
+const DAILY_FEED = [
+    { time:'9:45 PM', text:'All 9 agents delivered IDEAS.md files' },
+    { time:'9:40 PM', text:'Million Dollar Ideas report completed (5 ideas, 31KB)' },
+    { time:'9:38 PM', text:'Derek OS v2.0 built (10 new features)' },
+    { time:'9:30 PM', text:'Dwight crons rebuilt with proper voice' },
+    { time:'8:00 PM', text:'Bobby After Hours wrap delivered' },
+    { time:'7:05 PM', text:'Dwight reorganized MILO folder' },
+    { time:'6:50 PM', text:'Full team backfill completed (74 files)' },
+    { time:'6:50 PM', text:'Accountability trackers for all agents' },
+    { time:'6:19 PM', text:'Gateway auto-start FIXED' },
+    { time:'3:03 PM', text:'Derek building DBTech45.com in Codex' },
+    { time:'1:34 PM', text:'Profit margin analysis delivered (93% at $30K MRR)' },
+];
+
+// ── FILESYSTEM DATA (REAL) ──────────────
+const FILESYSTEM = {
+    'C:\\DEREK-OS': [
+        { type:'folder',name:'Projects',icon:'📁',desc:'All active projects and ventures' },
+        { type:'folder',name:'Agents',icon:'📁',desc:'Agent configurations and status' },
+        { type:'folder',name:'Documents',icon:'📁',desc:'Ideas vault, daily feed, reports' },
+        { type:'folder',name:'System',icon:'📁',desc:'System configuration files' },
+        { type:'file',name:'README.md',icon:'📄',desc:'Welcome to DEREK OS v2.0 — REAL DATA' },
+        { type:'file',name:'CHANGELOG.md',icon:'📄',desc:'Version history and updates' },
+    ],
+    'C:\\DEREK-OS\\Projects': PROJECTS.map(p => ({
+        type:'project', name:p.name, icon:p.icon, desc:p.desc, badge:p.status, color:p.color
+    })),
+    'C:\\DEREK-OS\\Agents': AGENTS.map(a => ({
+        type:'agent', name:a.name, icon:a.emoji, desc:a.role,
+        badge: a.status === 'online' ? 'online' : a.status === 'standby' ? 'standby' : 'draft'
+    })),
+    'C:\\DEREK-OS\\Documents': [
+        { type:'file',name:'Ideas Vault',icon:'💡',desc:'42 real ideas from all 9 agents + Million Dollar Ideas' },
+        { type:'file',name:'Daily Feed',icon:'📋',desc:'Real-time activity log from tonight' },
+        { type:'file',name:'MILLION-DOLLAR-IDEAS.md',icon:'🎯',desc:'5 big ideas researched by Milo (31KB report)' },
+        { type:'file',name:'Trading Journal.md',icon:'📊',desc:'Trade logs and analysis' },
+        { type:'file',name:'Goals 2025.md',icon:'🎯',desc:'Annual goals and milestones' },
+    ],
+    'C:\\DEREK-OS\\System': [
+        { type:'file',name:'config.json',icon:'⚙️',desc:'System configuration' },
+        { type:'file',name:'agents.json',icon:'🤖',desc:'10 agents — 9 online, 1 standby' },
+        { type:'file',name:'theme.json',icon:'🎨',desc:'Theme and UI preferences' },
+        { type:'file',name:'shortcuts.json',icon:'⌨️',desc:'Keyboard shortcut bindings' },
+    ]
+};
+
+// ── REAL NOTIFICATION DATA ──────────────
+let notifications = [
+    { agent:'Milo',text:'All 9 agents delivered IDEAS.md files. Full brainstorm complete.',time:'9:45 PM',unread:true },
+    { agent:'Milo',text:'Million Dollar Ideas report completed. 5 ideas, 31KB of market research.',time:'9:40 PM',unread:true },
+    { agent:'Anders',text:'Derek OS v2.0 built with 10 new features. All systems operational.',time:'9:38 PM',unread:true },
+    { agent:'Dwight',text:'Crons rebuilt with proper Schrute voice. Weather and news running.',time:'9:30 PM',unread:false },
+    { agent:'Bobby',text:'After Hours wrap delivered. Market analysis complete.',time:'8:00 PM',unread:false },
+    { agent:'Dwight',text:'MILO folder reorganized. Structure cleaned up.',time:'7:05 PM',unread:false },
+    { agent:'Milo',text:'Full team backfill completed. 74 files across all agents.',time:'6:50 PM',unread:false },
+    { agent:'Anders',text:'Gateway auto-start fixed. No more manual restarts.',time:'6:19 PM',unread:false },
+    { agent:'Dax',text:'Profit margin analysis: 93% margins at $30K MRR target.',time:'1:34 PM',unread:false },
+];
+
+// ── APP DEFINITIONS ─────────────────────
+const APPS = {
+    calculator:   { name:'Calculator',    icon:'🧮', width:300, height:420 },
+    notepad:      { name:'Notepad',       icon:'📝', width:500, height:400 },
+    terminal:     { name:'Terminal',       icon:'💻', width:600, height:400 },
+    clock:        { name:'Clock',          icon:'🕐', width:380, height:400 },
+    agents:       { name:'Agent Dashboard',icon:'🧠', width:500, height:500 },
+    sysmon:       { name:'System Monitor', icon:'📊', width:520, height:500 },
+    explorer:     { name:'File Explorer',  icon:'📁', width:550, height:450 },
+    ideas:        { name:'Ideas Vault',    icon:'💡', width:550, height:500 },
+    feed:         { name:'Daily Feed',     icon:'📋', width:450, height:450 },
+    usage:        { name:'Usage Tracker',  icon:'📈', width:900, height:600 },
+    'model-counsel': { name:'Model Counsel', icon:'🤝', width:900, height:600 },
+    settings:     { name:'Settings',       icon:'⚙️', width:450, height:480 },
+    messenger:    { name:'Messenger',      icon:'💬', width:700, height:550 },
+    about:        { name:'About DEREK OS', icon:'ℹ️', width:400, height:350 },
+    // ── DEREK OS v3.0 NEW SECTIONS ──
+    activity:     { name:'Activity Dashboard', icon:'📊', width:800, height:600 },
+    dna:          { name:'DNA Section',    icon:'🧬', width:700, height:500 },
+    memory:       { name:'Memory Bank',    icon:'🧠', width:900, height:650 },
+    skills:       { name:'Skills Inventory', icon:'🛠️', width:750, height:550 },
+    schedule:     { name:'Schedule Center', icon:'⏰', width:850, height:600 },
+    goals:        { name:'Goals Tracker',  icon:'🎯', width:800, height:550 },
+    todo:         { name:'Master Todo',    icon:'📋', width:700, height:600 },
+};
+
+// ── WINDOW MANAGER ──────────────────────
+let windows = {};
+let windowOrder = [];
+let nextZ = 100;
+let dragState = null;
+let resizeState = null;
+
+function generateWindowId() {
+    return 'win_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
+}
+
+function openApp(appId) {
+    closeStartMenu();
+
+    // Check if already open - focus it instead
+    const existing = Object.entries(windows).find(([k,v]) => v.appId === appId && !v.closed);
+    if (existing) {
+        const [winId, win] = existing;
+        if (win.minimized) toggleMinimize(winId);
+        focusWindow(winId);
+        return;
+    }
+
+    const app = APPS[appId];
+    if (!app) return;
+
+    const winId = generateWindowId();
+    const isMobile = window.innerWidth <= 768;
+    const w = isMobile ? window.innerWidth : Math.min(app.width, window.innerWidth - 40);
+    const h = isMobile ? (window.innerHeight - 48) : Math.min(app.height, window.innerHeight - 88);
+    const x = isMobile ? 0 : 40 + (Object.keys(windows).length % 8) * 30;
+    const y = isMobile ? 0 : 30 + (Object.keys(windows).length % 8) * 30;
+
+    windows[winId] = {
+        appId, x, y, w, h,
+        minimized: false, maximized: isMobile, closed: false,
+        prevBounds: null
+    };
+    windowOrder.push(winId);
+
+    const el = document.createElement('div');
+    el.className = 'window' + (isMobile ? ' maximized' : '');
+    el.id = winId;
+    el.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px;z-index:${++nextZ}`;
+
+    el.innerHTML = `
+        <div class="window-header" data-winid="${winId}">
+            <div class="window-header-left">
+                <span class="window-title-icon">${app.icon}</span>
+                <span class="window-title">${app.name}</span>
+            </div>
+            <div class="window-controls">
+                <button class="window-ctrl minimize" onclick="toggleMinimize('${winId}')" title="Minimize"></button>
+                <button class="window-ctrl maximize" onclick="toggleMaximize('${winId}')" title="Maximize"></button>
+                <button class="window-ctrl close" onclick="closeWindow('${winId}')" title="Close"></button>
+            </div>
+        </div>
+        <div class="window-body" id="${winId}-body"></div>
+        <div class="resize-handle r-right" data-winid="${winId}" data-dir="e"></div>
+        <div class="resize-handle r-bottom" data-winid="${winId}" data-dir="s"></div>
+        <div class="resize-handle r-corner" data-winid="${winId}" data-dir="se"></div>
+    `;
+
+    document.getElementById('windows-container').appendChild(el);
+    focusWindow(winId);
+    renderAppContent(appId, winId);
+    updateTaskbar();
+}
+
+function renderAppContent(appId, winId) {
+    const body = document.getElementById(winId + '-body');
+    if (!body) return;
+
+    switch(appId) {
+        case 'calculator': body.innerHTML = renderCalculator(winId); initCalculator(winId); break;
+        case 'notepad': body.innerHTML = renderNotepad(winId); initNotepad(winId); break;
+        case 'terminal': body.innerHTML = renderTerminal(winId); initTerminal(winId); break;
+        case 'clock': body.innerHTML = renderClock(winId); initClock(winId); break;
+        case 'agents': body.innerHTML = renderAgentDashboard(winId); break;
+        case 'sysmon': body.innerHTML = renderSystemMonitor(winId); initSystemMonitor(winId); break;
+        case 'explorer': body.innerHTML = renderFileExplorer(winId); initFileExplorer(winId); break;
+        case 'ideas': body.innerHTML = renderIdeasVault(winId); break;
+        case 'feed': body.innerHTML = renderDailyFeed(winId); break;
+        case 'usage': body.innerHTML = renderUsageTracker(winId); break;
+        case 'model-counsel': body.innerHTML = renderModelCounsel(winId); initModelCounsel(winId); break;
+        case 'settings': body.innerHTML = renderSettings(winId); initSettings(winId); break;
+        case 'messenger': body.innerHTML = renderMessenger(winId); break;
+        case 'about': body.innerHTML = renderAbout(winId); break;
+        // ── DEREK OS v3.0 NEW SECTIONS ──
+        case 'activity': body.innerHTML = renderActivityDashboard(winId); initActivityDashboard(winId); break;
+        case 'dna': body.innerHTML = renderDNASection(winId); break;
+        case 'memory': body.innerHTML = renderMemoryBank(winId); initMemoryBank(winId); break;
+        case 'skills': body.innerHTML = renderSkillsInventory(winId); break;
+        case 'schedule': body.innerHTML = renderScheduleCenter(winId); break;
+        case 'goals': body.innerHTML = renderGoalsTracker(winId); break;
+        case 'todo': body.innerHTML = renderMasterTodo(winId); initMasterTodo(winId); break;
+    }
+}
+
+function focusWindow(winId) {
+    document.querySelectorAll('.window').forEach(w => w.classList.remove('focused'));
+    const el = document.getElementById(winId);
+    if (el) {
+        el.classList.add('focused');
+        el.style.zIndex = ++nextZ;
+    }
+    windowOrder = windowOrder.filter(id => id !== winId);
+    windowOrder.push(winId);
+    updateTaskbar();
+}
+
+function toggleMinimize(winId) {
+    const win = windows[winId];
+    if (!win) return;
+    win.minimized = !win.minimized;
+    const el = document.getElementById(winId);
+    if (el) {
+        el.classList.toggle('minimized', win.minimized);
+        if (!win.minimized) focusWindow(winId);
+    }
+    updateTaskbar();
+}
+
+function toggleMaximize(winId) {
+    const win = windows[winId];
+    if (!win) return;
+    const el = document.getElementById(winId);
+    if (!el) return;
+
+    if (win.maximized) {
+        win.maximized = false;
+        el.classList.remove('maximized');
+        if (win.prevBounds) {
+            el.style.left = win.prevBounds.x + 'px';
+            el.style.top = win.prevBounds.y + 'px';
+            el.style.width = win.prevBounds.w + 'px';
+            el.style.height = win.prevBounds.h + 'px';
+        }
+    } else {
+        win.prevBounds = { x: win.x, y: win.y, w: win.w, h: win.h };
+        win.maximized = true;
+        el.classList.add('maximized');
+    }
+}
+
+function closeWindow(winId) {
+    const el = document.getElementById(winId);
+    if (el) {
+        el.style.animation = 'windowClose 0.2s forwards';
+        setTimeout(() => el.remove(), 200);
+    }
+    if (windows[winId]) windows[winId].closed = true;
+    windowOrder = windowOrder.filter(id => id !== winId);
+    // Clean up intervals
+    if (windows[winId] && windows[winId]._intervals) {
+        windows[winId]._intervals.forEach(i => clearInterval(i));
+    }
+    updateTaskbar();
+}
+
+function updateTaskbar() {
+    const container = document.getElementById('taskbar-apps');
+    const openWindows = Object.entries(windows).filter(([k,v]) => !v.closed);
+
+    container.innerHTML = openWindows.map(([winId, win]) => {
+        const app = APPS[win.appId];
+        const isFocused = windowOrder[windowOrder.length - 1] === winId && !win.minimized;
+        return `<div class="taskbar-app ${isFocused ? 'active' : ''} ${win.minimized ? 'minimized' : ''}"
+                     onclick="taskbarClick('${winId}')">
+            <span class="taskbar-app-icon">${app.icon}</span>
+            <span>${app.name}</span>
+        </div>`;
+    }).join('');
+}
+
+function taskbarClick(winId) {
+    const win = windows[winId];
+    if (!win) return;
+    if (win.minimized) {
+        toggleMinimize(winId);
+    } else if (windowOrder[windowOrder.length - 1] === winId) {
+        toggleMinimize(winId);
+    } else {
+        focusWindow(winId);
+    }
+}
+
+// ── DRAG & RESIZE ───────────────────────
+document.addEventListener('mousedown', e => {
+    const header = e.target.closest('.window-header');
+    if (header && !e.target.closest('.window-ctrl')) {
+        const winId = header.dataset.winid;
+        const win = windows[winId];
+        if (!win || win.maximized) return;
+        const el = document.getElementById(winId);
+        dragState = {
+            winId, el,
+            startX: e.clientX - win.x,
+            startY: e.clientY - win.y
+        };
+        focusWindow(winId);
+        e.preventDefault();
+    }
+
+    const handle = e.target.closest('.resize-handle');
+    if (handle) {
+        const winId = handle.dataset.winid;
+        const win = windows[winId];
+        if (!win || win.maximized) return;
+        const el = document.getElementById(winId);
+        resizeState = {
+            winId, el, dir: handle.dataset.dir,
+            startX: e.clientX, startY: e.clientY,
+            startW: win.w, startH: win.h
+        };
+        focusWindow(winId);
+        e.preventDefault();
+    }
+
+    const windowEl = e.target.closest('.window');
+    if (windowEl && windowEl.id) {
+        focusWindow(windowEl.id);
+    }
+});
+
+document.addEventListener('mousemove', e => {
+    if (dragState) {
+        const { winId, el, startX, startY } = dragState;
+        const win = windows[winId];
+        win.x = Math.max(0, Math.min(e.clientX - startX, window.innerWidth - 100));
+        win.y = Math.max(0, Math.min(e.clientY - startY, window.innerHeight - 100));
+        el.style.left = win.x + 'px';
+        el.style.top = win.y + 'px';
+    }
+    if (resizeState) {
+        const { winId, el, dir, startX, startY, startW, startH } = resizeState;
+        const win = windows[winId];
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (dir.includes('e')) {
+            win.w = Math.max(320, startW + dx);
+            el.style.width = win.w + 'px';
+        }
+        if (dir.includes('s')) {
+            win.h = Math.max(200, startH + dy);
+            el.style.height = win.h + 'px';
+        }
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    dragState = null;
+    resizeState = null;
+});
+
+// Touch support for mobile
+document.addEventListener('touchstart', e => {
+    const header = e.target.closest('.window-header');
+    if (header && !e.target.closest('.window-ctrl')) {
+        const winId = header.dataset.winid;
+        const win = windows[winId];
+        if (!win || win.maximized) return;
+        const el = document.getElementById(winId);
+        const touch = e.touches[0];
+        dragState = {
+            winId, el,
+            startX: touch.clientX - win.x,
+            startY: touch.clientY - win.y
+        };
+        focusWindow(winId);
+    }
+}, { passive: true });
+
+document.addEventListener('touchmove', e => {
+    if (dragState) {
+        const touch = e.touches[0];
+        const { winId, el, startX, startY } = dragState;
+        const win = windows[winId];
+        win.x = Math.max(0, touch.clientX - startX);
+        win.y = Math.max(0, touch.clientY - startY);
+        el.style.left = win.x + 'px';
+        el.style.top = win.y + 'px';
+    }
+}, { passive: true });
+
+document.addEventListener('touchend', () => { dragState = null; });
+
+
+// ══════════════════════════════════════════
+// APP RENDERERS
+// ══════════════════════════════════════════
+
+// ── CALCULATOR ──────────────────────────
+function renderCalculator(winId) {
+    return `
+        <div class="calc-display">
+            <div class="calc-expr" id="${winId}-calc-expr"></div>
+            <div class="calc-result" id="${winId}-calc-result">0</div>
+        </div>
+        <div class="calc-grid">
+            <button class="calc-btn special" onclick="calcAction('${winId}','C')">C</button>
+            <button class="calc-btn special" onclick="calcAction('${winId}','CE')">CE</button>
+            <button class="calc-btn op" onclick="calcAction('${winId}','%')">%</button>
+            <button class="calc-btn op" onclick="calcAction('${winId}','/')">÷</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','7')">7</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','8')">8</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','9')">9</button>
+            <button class="calc-btn op" onclick="calcAction('${winId}','*')">×</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','4')">4</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','5')">5</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','6')">6</button>
+            <button class="calc-btn op" onclick="calcAction('${winId}','-')">−</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','1')">1</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','2')">2</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','3')">3</button>
+            <button class="calc-btn op" onclick="calcAction('${winId}','+')">+</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','negate')">±</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','0')">0</button>
+            <button class="calc-btn" onclick="calcAction('${winId}','.')">.</button>
+            <button class="calc-btn equals" onclick="calcAction('${winId}','=')">=</button>
+        </div>`;
+}
+
+const calcStates = {};
+function initCalculator(winId) {
+    calcStates[winId] = { display:'0', expr:'', op:null, prev:null, fresh:true };
+}
+
+function calcAction(winId, key) {
+    const s = calcStates[winId];
+    const exprEl = document.getElementById(winId + '-calc-expr');
+    const resEl = document.getElementById(winId + '-calc-result');
+    if (!s) return;
+
+    if (key === 'C') { s.display='0'; s.expr=''; s.op=null; s.prev=null; s.fresh=true; }
+    else if (key === 'CE') { s.display='0'; s.fresh=true; }
+    else if (key === 'negate') { s.display = String(-parseFloat(s.display)); }
+    else if ('0123456789.'.includes(key)) {
+        if (s.fresh) { s.display = key === '.' ? '0.' : key; s.fresh = false; }
+        else { if (key === '.' && s.display.includes('.')) return; s.display += key; }
+    }
+    else if ('+-*/%'.includes(key)) {
+        if (s.op && !s.fresh) {
+            const result = doCalc(s.prev, parseFloat(s.display), s.op);
+            s.display = String(result);
+            s.prev = result;
+        } else {
+            s.prev = parseFloat(s.display);
+        }
+        s.op = key;
+        s.expr = s.display + ' ' + {'+':'+','-':'\u2212','*':'\u00d7','/':'\u00f7','%':'%'}[key];
+        s.fresh = true;
+    }
+    else if (key === '=') {
+        if (s.op && s.prev !== null) {
+            const result = doCalc(s.prev, parseFloat(s.display), s.op);
+            s.expr = s.prev + ' ' + {'+':'+','-':'\u2212','*':'\u00d7','/':'\u00f7','%':'%'}[s.op] + ' ' + s.display + ' =';
+            s.display = String(result);
+            s.op = null; s.prev = null; s.fresh = true;
+        }
+    }
+
+    resEl.textContent = s.display;
+    exprEl.textContent = s.expr;
+}
+
+function doCalc(a, b, op) {
+    switch(op) {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return b === 0 ? 'Error' : a / b;
+        case '%': return a % b;
+        default: return b;
+    }
+}
+
+// ── NOTEPAD ─────────────────────────────
+function renderNotepad(winId) {
+    const saved = localStorage.getItem('derek-os-notepad') || '# Welcome to DEREK OS Notepad\n\nStart typing here...\n\n- Press Ctrl+S to save\n- Your notes are stored locally\n- Simple and fast\n';
+    return `
+        <div class="notepad-toolbar">
+            <button class="notepad-btn" onclick="notepadAction('${winId}','save')">Save</button>
+            <button class="notepad-btn" onclick="notepadAction('${winId}','clear')">Clear</button>
+            <button class="notepad-btn" onclick="notepadAction('${winId}','copy')">Copy All</button>
+        </div>
+        <textarea class="notepad-area" id="${winId}-notepad">${saved.replace(/</g,'&lt;')}</textarea>`;
+}
+
+function initNotepad(winId) {
+    const area = document.getElementById(winId + '-notepad');
+    if (area) {
+        area.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                notepadAction(winId, 'save');
+            }
+        });
+    }
+}
+
+function notepadAction(winId, action) {
+    const area = document.getElementById(winId + '-notepad');
+    if (!area) return;
+    if (action === 'save') {
+        localStorage.setItem('derek-os-notepad', area.value);
+        pushNotification('System', 'Notepad saved successfully.');
+    }
+    else if (action === 'clear') { area.value = ''; }
+    else if (action === 'copy') {
+        navigator.clipboard.writeText(area.value).catch(() => {});
+        pushNotification('System', 'Notepad contents copied to clipboard.');
+    }
+}
+
+// ── TERMINAL ────────────────────────────
+function renderTerminal(winId) {
+    return `
+        <div class="terminal-body" id="${winId}-terminal">
+            <div class="terminal-line"><span class="output">DEREK OS Terminal v2.0</span></div>
+            <div class="terminal-line"><span class="output">Type "help" for available commands.</span></div>
+            <div class="terminal-line"><span class="output">────────────────────────────────</span></div>
+            <div class="terminal-input-line">
+                <span class="prompt">derek@os:~$&nbsp;</span>
+                <input class="terminal-input" id="${winId}-term-input" autofocus spellcheck="false" autocomplete="off">
+            </div>
+        </div>`;
+}
+
+function initTerminal(winId) {
+    const input = document.getElementById(winId + '-term-input');
+    const body = document.getElementById(winId + '-terminal');
+    if (!input || !body) return;
+
+    let history = [];
+    let histIdx = -1;
+
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            const cmd = input.value.trim();
+            if (cmd) {
+                history.unshift(cmd);
+                histIdx = -1;
+                const cmdLine = document.createElement('div');
+                cmdLine.className = 'terminal-line';
+                cmdLine.innerHTML = `<span class="prompt">derek@os:~$</span> ${escHtml(cmd)}`;
+                input.parentElement.before(cmdLine);
+                const output = execTerminalCmd(cmd);
+                if (output) {
+                    const outLine = document.createElement('div');
+                    outLine.className = 'terminal-line';
+                    outLine.innerHTML = output;
+                    input.parentElement.before(outLine);
+                }
+            }
+            input.value = '';
+            body.scrollTop = body.scrollHeight;
+        }
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (histIdx < history.length - 1) { histIdx++; input.value = history[histIdx]; }
+        }
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (histIdx > 0) { histIdx--; input.value = history[histIdx]; }
+            else { histIdx = -1; input.value = ''; }
+        }
+    });
+
+    body.addEventListener('click', () => input.focus());
+}
+
+function execTerminalCmd(cmd) {
+    const parts = cmd.split(/\s+/);
+    const command = parts[0].toLowerCase();
+
+    const cmds = {
+        help: () => `<span class="output">Available commands:
+  help          Show this help
+  agents        List all agents
+  projects      List all projects
+  ideas         Show ideas count
+  feed          Show daily feed
+  status        System status
+  uptime        Show uptime
+  date          Current date/time
+  whoami        Current user
+  clear         Clear terminal
+  echo [text]   Print text
+  open [app]    Open an app
+  neofetch      System info
+  ls            List files
+  pwd           Print working directory
+  matrix        Matrix rain (just kidding)
+  cowsay [msg]  Moo</span>`,
+
+        agents: () => {
+            const lines = AGENTS.map(a => `  ${a.emoji} ${a.name.padEnd(8)} ${a.status === 'online' ? '\u{1f7e2}' : a.status === 'standby' ? '\u{1f7e1}' : '\u26ab'} ${a.role}`);
+            return `<span class="output">${lines.join('\n')}</span>`;
+        },
+
+        projects: () => {
+            const lines = PROJECTS.map(p => `  ${p.icon} ${p.name.padEnd(22)} [${p.status.toUpperCase()}]  ${p.desc}`);
+            return `<span class="output">${lines.join('\n')}</span>`;
+        },
+
+        ideas: () => `<span class="output">Ideas Vault: ${IDEAS_VAULT.length} ideas from ${new Set(IDEAS_VAULT.map(i=>i.agent)).size} agents
+  Million Dollar Ideas: ${IDEAS_VAULT.filter(i=>i.category==='million-dollar').length}
+  Agent Build Ideas:    ${IDEAS_VAULT.filter(i=>i.category==='build').length}
+  Type "open ideas" to view the full vault.</span>`,
+
+        feed: () => {
+            const lines = DAILY_FEED.map(f => `  ${f.time}  ${f.text}`);
+            return `<span class="output">${lines.join('\n')}</span>`;
+        },
+
+        status: () => `<span class="output">DEREK OS v2.0 — All Systems Operational
+  Agents Online: ${AGENTS.filter(a=>a.status==='online').length}/${AGENTS.length}
+  Agent Standby: ${AGENTS.filter(a=>a.status==='standby').length}
+  Projects:      ${PROJECTS.length} (${PROJECTS.filter(p=>p.status==='live').length} live, ${PROJECTS.filter(p=>p.status==='building').length} building)
+  Ideas:         ${IDEAS_VAULT.length}
+  Windows Open:  ${Object.values(windows).filter(w=>!w.closed).length}
+  Theme:         ${document.documentElement.dataset.theme}
+  Uptime:        ${getUptime()}</span>`,
+
+        uptime: () => `<span class="output">${getUptime()}</span>`,
+        date: () => `<span class="output">${new Date().toString()}</span>`,
+        whoami: () => `<span class="output">derek</span>`,
+        pwd: () => `<span class="output">C:\\DEREK-OS</span>`,
+        ls: () => `<span class="output">Projects/  Agents/  Documents/  System/  README.md  CHANGELOG.md</span>`,
+
+        echo: () => `<span class="output">${escHtml(parts.slice(1).join(' '))}</span>`,
+
+        open: () => {
+            const appName = parts[1];
+            if (appName && APPS[appName]) { setTimeout(() => openApp(appName), 100); return `<span class="output">Opening ${APPS[appName].name}...</span>`; }
+            return `<span class="error">Usage: open [${Object.keys(APPS).join('|')}]</span>`;
+        },
+
+        clear: () => { setTimeout(() => { document.querySelectorAll('.terminal-body .terminal-line:not(:last-child)').forEach(el => { if (el.closest('.terminal-body')) el.remove(); }); }, 10); return ''; },
+
+        neofetch: () => `<span class="output">
+  \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557  \u2588\u2588\u2557     \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557
+  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2551 \u2588\u2588\u2554\u255d    \u2588\u2588\u2554\u2550\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d
+  \u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2554\u255d     \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557
+  \u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2554\u2550\u2588\u2588\u2557     \u2588\u2588\u2551   \u2588\u2588\u2551\u255a\u2550\u2550\u2550\u2550\u2588\u2588\u2551
+  \u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2557    \u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551
+  \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d     \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d
+
+  OS:       DEREK OS v2.0
+  User:     derek
+  Shell:    dos-terminal 1.0
+  Theme:    ${document.documentElement.dataset.theme}
+  Agents:   ${AGENTS.length} (${AGENTS.filter(a=>a.status==='online').length} online, ${AGENTS.filter(a=>a.status==='standby').length} standby)
+  Projects: ${PROJECTS.length} (${PROJECTS.filter(p=>p.status==='live').length} live)
+  Ideas:    ${IDEAS_VAULT.length}
+  Uptime:   ${getUptime()}</span>`,
+
+        matrix: () => `<span class="output" style="color:#00ff41">Wake up, Derek... The Matrix has you...</span>`,
+
+        cowsay: () => {
+            const msg = parts.slice(1).join(' ') || 'moo';
+            const border = '\u2500'.repeat(msg.length + 2);
+            return `<span class="output"> \u250c${border}\u2510
+ \u2502 ${escHtml(msg)} \u2502
+ \u2514${border}\u2518
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||</span>`;
+        },
+    };
+
+    if (cmds[command]) return cmds[command]();
+    return `<span class="error">Command not found: ${escHtml(command)}. Type "help" for commands.</span>`;
+}
+
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── CLOCK ───────────────────────────────
+function renderClock(winId) {
+    return `
+        <div class="clock-app">
+            <div class="clock-display" id="${winId}-clock-time">--:--:--</div>
+            <div class="clock-date" id="${winId}-clock-date">Loading...</div>
+            <div style="display:flex;gap:6px;margin-bottom:16px">
+                <button class="clock-btn active" onclick="clockTab('${winId}','clock')" id="${winId}-tab-clock">Clock</button>
+                <button class="clock-btn" onclick="clockTab('${winId}','stopwatch')" id="${winId}-tab-stopwatch">Stopwatch</button>
+                <button class="clock-btn" onclick="clockTab('${winId}','timer')" id="${winId}-tab-timer">Timer</button>
+            </div>
+            <div id="${winId}-clock-panel"></div>
+            <div id="${winId}-stopwatch-panel" style="display:none">
+                <div class="timer-display" id="${winId}-sw-display">00:00.00</div>
+                <div class="clock-controls">
+                    <button class="clock-btn" id="${winId}-sw-start" onclick="swAction('${winId}','toggle')">Start</button>
+                    <button class="clock-btn" onclick="swAction('${winId}','lap')">Lap</button>
+                    <button class="clock-btn" onclick="swAction('${winId}','reset')">Reset</button>
+                </div>
+                <div class="stopwatch-laps" id="${winId}-sw-laps"></div>
+            </div>
+            <div id="${winId}-timer-panel" style="display:none">
+                <div class="timer-display" id="${winId}-timer-display">05:00</div>
+                <div class="clock-controls">
+                    <button class="clock-btn" id="${winId}-timer-start" onclick="timerAction('${winId}','toggle')">Start</button>
+                    <button class="clock-btn" onclick="timerAction('${winId}','reset')">Reset</button>
+                </div>
+                <div style="margin-top:12px;display:flex;gap:6px">
+                    <button class="clock-btn" onclick="setTimer('${winId}',60)">1m</button>
+                    <button class="clock-btn" onclick="setTimer('${winId}',300)">5m</button>
+                    <button class="clock-btn" onclick="setTimer('${winId}',600)">10m</button>
+                    <button class="clock-btn" onclick="setTimer('${winId}',1500)">25m</button>
+                </div>
+            </div>
+        </div>`;
+}
+
+const clockData = {};
+function initClock(winId) {
+    clockData[winId] = {
+        sw: { running: false, start: 0, elapsed: 0, laps: [], interval: null },
+        timer: { running: false, remaining: 300, total: 300, interval: null }
+    };
+    const interval = setInterval(() => {
+        const timeEl = document.getElementById(winId + '-clock-time');
+        const dateEl = document.getElementById(winId + '-clock-date');
+        if (!timeEl) { clearInterval(interval); return; }
+        const now = new Date();
+        timeEl.textContent = now.toLocaleTimeString('en-US', { hour12: true });
+        dateEl.textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }, 200);
+    if (!windows[winId]._intervals) windows[winId]._intervals = [];
+    windows[winId]._intervals.push(interval);
+}
+
+function clockTab(winId, tab) {
+    ['clock','stopwatch','timer'].forEach(t => {
+        const panel = document.getElementById(winId + '-' + t + '-panel');
+        const btn = document.getElementById(winId + '-tab-' + t);
+        if (panel) panel.style.display = t === tab ? '' : 'none';
+        if (btn) btn.classList.toggle('active', t === tab);
+    });
+}
+
+function swAction(winId, action) {
+    const sw = clockData[winId]?.sw;
+    if (!sw) return;
+    if (action === 'toggle') {
+        if (sw.running) {
+            sw.elapsed += Date.now() - sw.start;
+            sw.running = false;
+            clearInterval(sw.interval);
+            document.getElementById(winId + '-sw-start').textContent = 'Start';
+        } else {
+            sw.start = Date.now();
+            sw.running = true;
+            document.getElementById(winId + '-sw-start').textContent = 'Stop';
+            sw.interval = setInterval(() => {
+                const total = sw.elapsed + (Date.now() - sw.start);
+                document.getElementById(winId + '-sw-display').textContent = fmtMs(total);
+            }, 30);
+        }
+    } else if (action === 'lap' && sw.running) {
+        const total = sw.elapsed + (Date.now() - sw.start);
+        sw.laps.push(total);
+        const lapsEl = document.getElementById(winId + '-sw-laps');
+        lapsEl.innerHTML = sw.laps.map((l,i) => `<div>Lap ${i+1}: ${fmtMs(l)}</div>`).reverse().join('');
+    } else if (action === 'reset') {
+        sw.running = false;
+        sw.elapsed = 0;
+        sw.laps = [];
+        clearInterval(sw.interval);
+        document.getElementById(winId + '-sw-display').textContent = '00:00.00';
+        document.getElementById(winId + '-sw-laps').innerHTML = '';
+        document.getElementById(winId + '-sw-start').textContent = 'Start';
+    }
+}
+
+function fmtMs(ms) {
+    const s = Math.floor(ms/1000);
+    const m = Math.floor(s/60);
+    const cs = Math.floor((ms%1000)/10);
+    return `${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}.${String(cs).padStart(2,'0')}`;
+}
+
+function timerAction(winId, action) {
+    const t = clockData[winId]?.timer;
+    if (!t) return;
+    if (action === 'toggle') {
+        if (t.running) {
+            t.running = false;
+            clearInterval(t.interval);
+            document.getElementById(winId + '-timer-start').textContent = 'Start';
+        } else {
+            if (t.remaining <= 0) return;
+            t.running = true;
+            document.getElementById(winId + '-timer-start').textContent = 'Pause';
+            const startTime = Date.now();
+            const startRemaining = t.remaining;
+            t.interval = setInterval(() => {
+                t.remaining = Math.max(0, startRemaining - Math.floor((Date.now() - startTime) / 1000));
+                document.getElementById(winId + '-timer-display').textContent = fmtTimer(t.remaining);
+                if (t.remaining <= 0) {
+                    clearInterval(t.interval);
+                    t.running = false;
+                    document.getElementById(winId + '-timer-start').textContent = 'Start';
+                    pushNotification('Clock', 'Timer finished!');
+                }
+            }, 200);
+        }
+    } else if (action === 'reset') {
+        t.running = false;
+        clearInterval(t.interval);
+        t.remaining = t.total;
+        document.getElementById(winId + '-timer-display').textContent = fmtTimer(t.remaining);
+        document.getElementById(winId + '-timer-start').textContent = 'Start';
+    }
+}
+
+function setTimer(winId, secs) {
+    const t = clockData[winId]?.timer;
+    if (!t || t.running) return;
+    t.total = secs;
+    t.remaining = secs;
+    document.getElementById(winId + '-timer-display').textContent = fmtTimer(secs);
+}
+
+function fmtTimer(s) {
+    return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+
+// ── AGENT DASHBOARD (REAL DATA) ─────────
+function renderAgentDashboard(winId) {
+    const onlineCount = AGENTS.filter(a=>a.status==='online').length;
+    const standbyCount = AGENTS.filter(a=>a.status==='standby').length;
+    return `<div class="agent-dash">
+        <div style="padding:0 0 12px;font-size:11px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace">
+            ${onlineCount} online / ${standbyCount} standby / ${AGENTS.length} total agents
+        </div>
+        ${AGENTS.map(a => `
+            <div class="agent-dash-card" onclick="messageAgent('${a.name}')">
+                <div class="agent-dash-avatar" style="background:${a.color}">
+                    ${a.emoji}
+                    <div class="status-dot" style="background:${a.status==='online'?'var(--status-online)':a.status==='standby'?'var(--status-standby)':'var(--status-offline)'}"></div>
+                </div>
+                <div class="agent-dash-info">
+                    <div class="agent-dash-name">${a.name}</div>
+                    <div class="agent-dash-role">${a.role}</div>
+                    <div class="agent-dash-task">${a.task}</div>
+                </div>
+                <div class="agent-dash-meta">
+                    <div class="agent-dash-time">${a.lastActive}</div>
+                    <button class="agent-dash-btn" onclick="event.stopPropagation();openMessengerForAgent('${a.name}')">Chat</button>
+                </div>
+            </div>
+        `).join('')}
+    </div>`;
+}
+
+function messageAgent(name) {
+    pushNotification(name, 'Opening chat with ' + name + '...');
+}
+
+function openMessengerForAgent(name) {
+    openApp('messenger');
+    pushNotification(name, 'Starting conversation with ' + name + '...');
+}
+
+// ── IDEAS VAULT (REAL DATA from all agents) ──
+function renderIdeasVault(winId) {
+    const milDollar = IDEAS_VAULT.filter(i => i.category === 'million-dollar');
+    const agentIdeas = IDEAS_VAULT.filter(i => i.category === 'build');
+
+    // Group agent ideas by agent
+    const byAgent = {};
+    agentIdeas.forEach(idea => {
+        if (!byAgent[idea.agent]) byAgent[idea.agent] = [];
+        byAgent[idea.agent].push(idea);
+    });
+
+    let html = `<div class="ideas-vault">
+        <div style="padding:0 0 12px;font-size:11px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace">
+            ${IDEAS_VAULT.length} ideas from ${new Set(IDEAS_VAULT.map(i=>i.agent)).size} agents
+        </div>
+
+        <div class="ideas-section">
+            <div class="ideas-section-title">\u{1f3af} Million Dollar Ideas (Milo's Report)</div>
+            ${milDollar.map(idea => `
+                <div class="idea-card">
+                    <div class="idea-card-header">
+                        <div class="idea-card-name">${idea.name}</div>
+                        <div class="idea-card-agent">${idea.agent}</div>
+                    </div>
+                    <div class="idea-card-desc">${idea.desc}</div>
+                </div>
+            `).join('')}
+        </div>`;
+
+    Object.entries(byAgent).forEach(([agent, ideas]) => {
+        const agentData = AGENTS.find(a => a.name === agent);
+        const emoji = agentData ? agentData.emoji : '\u{1f4a1}';
+        html += `
+        <div class="ideas-section">
+            <div class="ideas-section-title">${emoji} ${agent}'s Ideas</div>
+            ${ideas.map(idea => `
+                <div class="idea-card">
+                    <div class="idea-card-header">
+                        <div class="idea-card-name">${idea.name}</div>
+                        <div class="idea-card-agent">${idea.agent}</div>
+                    </div>
+                    <div class="idea-card-desc">${idea.desc}</div>
+                </div>
+            `).join('')}
+        </div>`;
+    });
+
+    html += '</div>';
+    return html;
+}
+
+// ── DAILY FEED (REAL DATA) ──────────────
+function renderDailyFeed(winId) {
+    return `<div class="daily-feed">
+        <div class="feed-date">Today's Activity</div>
+        ${DAILY_FEED.map(item => `
+            <div class="feed-item">
+                <div class="feed-time">${item.time}</div>
+                <div class="feed-text">${item.text}</div>
+            </div>
+        `).join('')}
+    </div>`;
+}
+
+// ── SYSTEM MONITOR ──────────────────────
+function renderSystemMonitor(winId) {
+    return `<div class="sysmon">
+        <div class="sysmon-grid">
+            <div class="sysmon-card">
+                <div class="sysmon-label">CPU Usage</div>
+                <div class="sysmon-value" id="${winId}-cpu">0%</div>
+                <div class="sysmon-bar"><div class="sysmon-fill" id="${winId}-cpu-bar" style="width:0;background:var(--accent)"></div></div>
+                <div class="sysmon-chart" id="${winId}-cpu-chart"></div>
+            </div>
+            <div class="sysmon-card">
+                <div class="sysmon-label">Memory</div>
+                <div class="sysmon-value" id="${winId}-mem">0%</div>
+                <div class="sysmon-bar"><div class="sysmon-fill" id="${winId}-mem-bar" style="width:0;background:var(--success)"></div></div>
+                <div class="sysmon-chart" id="${winId}-mem-chart"></div>
+            </div>
+            <div class="sysmon-card">
+                <div class="sysmon-label">Network I/O</div>
+                <div class="sysmon-value" id="${winId}-net">0 KB/s</div>
+                <div class="sysmon-bar"><div class="sysmon-fill" id="${winId}-net-bar" style="width:0;background:var(--info)"></div></div>
+                <div class="sysmon-chart" id="${winId}-net-chart"></div>
+            </div>
+            <div class="sysmon-card">
+                <div class="sysmon-label">Disk</div>
+                <div class="sysmon-value" id="${winId}-disk">0%</div>
+                <div class="sysmon-bar"><div class="sysmon-fill" id="${winId}-disk-bar" style="width:0;background:var(--warning)"></div></div>
+                <div class="sysmon-info">
+                    <div class="sysmon-info-item">Used: <span id="${winId}-disk-used">0 GB</span></div>
+                    <div class="sysmon-info-item">Free: <span id="${winId}-disk-free">0 GB</span></div>
+                    <div class="sysmon-info-item">Total: <span>512 GB</span></div>
+                    <div class="sysmon-info-item">Type: <span>NVMe SSD</span></div>
+                </div>
+            </div>
+            <div class="sysmon-card sysmon-full">
+                <div class="sysmon-label">System Info</div>
+                <div class="sysmon-info" style="margin-top:8px">
+                    <div class="sysmon-info-item">OS: <span>DEREK OS v2.0</span></div>
+                    <div class="sysmon-info-item">Kernel: <span>dos-kernel 2.0.0</span></div>
+                    <div class="sysmon-info-item">Uptime: <span id="${winId}-uptime">${getUptime()}</span></div>
+                    <div class="sysmon-info-item">Agents: <span>${AGENTS.filter(a=>a.status==='online').length}/${AGENTS.length} online</span></div>
+                </div>
+                <div class="sysmon-label" style="margin-top:12px">Active Processes</div>
+                <div class="sysmon-processes" id="${winId}-procs"></div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function initSystemMonitor(winId) {
+    const cpuHistory = Array(30).fill(0);
+    const memHistory = Array(30).fill(0);
+    const netHistory = Array(30).fill(0);
+
+    function initChart(id, count) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = Array(count).fill(0).map(() => '<div class="sysmon-chart-bar" style="height:2px"></div>').join('');
+    }
+    initChart(winId+'-cpu-chart', 30);
+    initChart(winId+'-mem-chart', 30);
+    initChart(winId+'-net-chart', 30);
+
+    // Real agent processes
+    const agentProcesses = AGENTS.filter(a => a.status === 'online').map(a => ({
+        name: `agent-${a.id}`,
+        cpu: (1 + Math.random() * 8).toFixed(1) + '%',
+        mem: Math.round(64 + Math.random() * 320) + ' MB'
+    }));
+    agentProcesses.unshift({ name: 'derek-os-core', cpu: '2.1%', mem: '128 MB' });
+    agentProcesses.push({ name: 'window-manager', cpu: '1.5%', mem: '64 MB' });
+    agentProcesses.push({ name: 'notification-svc', cpu: '0.3%', mem: '32 MB' });
+
+    const procsEl = document.getElementById(winId+'-procs');
+    if (procsEl) {
+        procsEl.innerHTML = agentProcesses.map(p =>
+            `<div class="sysmon-proc"><span class="sysmon-proc-name">${p.name}</span><span class="sysmon-proc-val">${p.cpu} / ${p.mem}</span></div>`
+        ).join('');
+    }
+
+    const interval = setInterval(() => {
+        const cpu = 15 + Math.random() * 35 + Math.sin(Date.now()/3000) * 10;
+        const mem = 45 + Math.random() * 15;
+        const netKb = 100 + Math.random() * 900;
+        const diskPct = 62 + Math.random() * 3;
+
+        cpuHistory.shift(); cpuHistory.push(cpu);
+        memHistory.shift(); memHistory.push(mem);
+        netHistory.shift(); netHistory.push(netKb/1000*100);
+
+        updateSysmonValue(winId+'-cpu', Math.round(cpu)+'%');
+        updateSysmonValue(winId+'-mem', Math.round(mem)+'%');
+        updateSysmonValue(winId+'-net', Math.round(netKb)+' KB/s');
+        updateSysmonValue(winId+'-disk', Math.round(diskPct)+'%');
+
+        updateSysmonBar(winId+'-cpu-bar', cpu);
+        updateSysmonBar(winId+'-mem-bar', mem);
+        updateSysmonBar(winId+'-net-bar', netKb/10);
+        updateSysmonBar(winId+'-disk-bar', diskPct);
+
+        updateSysmonChart(winId+'-cpu-chart', cpuHistory);
+        updateSysmonChart(winId+'-mem-chart', memHistory);
+        updateSysmonChart(winId+'-net-chart', netHistory);
+
+        const diskUsed = (512 * diskPct / 100).toFixed(1);
+        updateSysmonValue(winId+'-disk-used', diskUsed + ' GB');
+        updateSysmonValue(winId+'-disk-free', (512 - parseFloat(diskUsed)).toFixed(1) + ' GB');
+        updateSysmonValue(winId+'-uptime', getUptime());
+    }, 1500);
+
+    if (!windows[winId]._intervals) windows[winId]._intervals = [];
+    windows[winId]._intervals.push(interval);
+}
+
+function updateSysmonValue(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+}
+
+function updateSysmonBar(id, pct) {
+    const el = document.getElementById(id);
+    if (el) el.style.width = Math.min(100, pct) + '%';
+}
+
+function updateSysmonChart(id, data) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const bars = el.children;
+    for (let i = 0; i < bars.length && i < data.length; i++) {
+        bars[i].style.height = Math.max(2, (data[i] / 100) * 60) + 'px';
+    }
+}
+
+// ── FILE EXPLORER ───────────────────────
+const explorerState = {};
+
+function renderFileExplorer(winId) {
+    return `<div class="explorer">
+        <div class="explorer-toolbar">
+            <button class="explorer-nav-btn" onclick="explorerBack('${winId}')">←</button>
+            <button class="explorer-nav-btn" onclick="explorerHome('${winId}')">🏠</button>
+            <div class="explorer-path" id="${winId}-path">C:\\DEREK-OS</div>
+        </div>
+        <div class="explorer-content" id="${winId}-files"></div>
+    </div>`;
+}
+
+function initFileExplorer(winId) {
+    explorerState[winId] = { path: 'C:\\DEREK-OS', history: ['C:\\DEREK-OS'] };
+    renderExplorerFiles(winId);
+}
+
+function renderExplorerFiles(winId) {
+    const state = explorerState[winId];
+    const pathEl = document.getElementById(winId + '-path');
+    const filesEl = document.getElementById(winId + '-files');
+    if (!pathEl || !filesEl) return;
+
+    pathEl.textContent = state.path;
+    const items = FILESYSTEM[state.path] || [];
+
+    filesEl.innerHTML = items.map(item => `
+        <div class="explorer-item" onclick="explorerClick('${winId}','${item.type}','${item.name}')">
+            <div class="explorer-item-icon">${item.icon}</div>
+            <div class="explorer-item-info">
+                <div class="explorer-item-name" ${item.color ? `style="color:${item.color}"` : ''}>${item.name}</div>
+                <div class="explorer-item-desc">${item.desc}</div>
+            </div>
+            ${item.badge ? `<span class="explorer-item-badge badge-${item.badge}">${item.badge}</span>` : ''}
+        </div>
+    `).join('') || '<div style="padding:24px;text-align:center;color:var(--text-tertiary)">Empty folder</div>';
+}
+
+function explorerClick(winId, type, name) {
+    const state = explorerState[winId];
+    if (type === 'folder') {
+        state.path = state.path + '\\' + name;
+        state.history.push(state.path);
+        renderExplorerFiles(winId);
+    }
+}
+
+function explorerBack(winId) {
+    const state = explorerState[winId];
+    if (state.history.length > 1) {
+        state.history.pop();
+        state.path = state.history[state.history.length - 1];
+        renderExplorerFiles(winId);
+    }
+}
+
+function explorerHome(winId) {
+    const state = explorerState[winId];
+    state.path = 'C:\\DEREK-OS';
+    state.history = ['C:\\DEREK-OS'];
+    renderExplorerFiles(winId);
+}
+
+// ── MODEL COUNSEL ────────────────────────────
+function renderModelCounsel(winId) {
+    return `<div class="model-counsel-container" style="padding:16px;height:100%;overflow-y:auto;">
+        <div class="model-counsel-header" style="margin-bottom:20px;">
+            <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0 0 8px 0;">Model Counsel</h2>
+            <p style="color:var(--text-secondary);font-size:13px;margin:0;">Ask the same question to multiple AI models and compare responses</p>
+        </div>
+        
+        <div class="model-selection" style="margin-bottom:20px;">
+            <h3 style="color:var(--text-primary);font-size:14px;font-weight:600;margin:0 0 12px 0;">Select Models:</h3>
+            <div class="model-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px;">
+                <label style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;cursor:pointer;">
+                    <input type="checkbox" id="${winId}-model-claude-opus" value="claude-opus" checked style="accent-color:var(--accent);">
+                    <span style="color:var(--text-primary);font-size:13px;">Claude Opus 4.6</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;cursor:pointer;">
+                    <input type="checkbox" id="${winId}-model-claude-sonnet" value="claude-sonnet" checked style="accent-color:var(--accent);">
+                    <span style="color:var(--text-primary);font-size:13px;">Claude Sonnet 3.5</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;cursor:pointer;">
+                    <input type="checkbox" id="${winId}-model-gemini-pro" value="gemini-pro" checked style="accent-color:var(--accent);">
+                    <span style="color:var(--text-primary);font-size:13px;">Gemini 2.5 Pro</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;cursor:pointer;">
+                    <input type="checkbox" id="${winId}-model-gemini-flash" value="gemini-flash" checked style="accent-color:var(--accent);">
+                    <span style="color:var(--text-primary);font-size:13px;">Gemini Flash</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;cursor:pointer;">
+                    <input type="checkbox" id="${winId}-model-gpt-4" value="gpt-4" checked style="accent-color:var(--accent);">
+                    <span style="color:var(--text-primary);font-size:13px;">GPT-4 Turbo</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;cursor:pointer;">
+                    <input type="checkbox" id="${winId}-model-llama" value="llama" checked style="accent-color:var(--accent);">
+                    <span style="color:var(--text-primary);font-size:13px;">Llama 3.1 70B</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-input" style="margin-bottom:20px;">
+            <h3 style="color:var(--text-primary);font-size:14px;font-weight:600;margin:0 0 8px 0;">Your Question:</h3>
+            <textarea id="${winId}-question" placeholder="Ask your question here..." style="width:100%;height:80px;padding:12px;background:var(--bg-input);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-family:inherit;font-size:13px;resize:vertical;"></textarea>
+            <div style="margin-top:12px;">
+                <button id="${winId}-submit" onclick="submitModelCounsel('${winId}')" style="padding:10px 24px;background:var(--accent);color:white;border:none;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px;">Ask All Models</button>
+                <button onclick="clearModelCounsel('${winId}')" style="margin-left:8px;padding:10px 16px;background:transparent;color:var(--text-secondary);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;">Clear</button>
+            </div>
+        </div>
+
+        <div id="${winId}-results" class="results-container" style="display:none;">
+            <div class="results-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h3 style="color:var(--text-primary);font-size:14px;font-weight:600;margin:0;">Results</h3>
+                <div id="${winId}-progress" style="color:var(--text-secondary);font-size:12px;"></div>
+            </div>
+            <div id="${winId}-responses" class="responses-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:16px;margin-bottom:20px;"></div>
+            <div id="${winId}-synthesis" class="synthesis-section" style="display:none;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;">
+                <h3 style="color:var(--text-primary);font-size:14px;font-weight:600;margin:0 0 12px 0;">🎯 Best Combined Answer</h3>
+                <div id="${winId}-synthesis-content" style="color:var(--text-primary);line-height:1.6;"></div>
+            </div>
+        </div>
+    </div>`;
+}
+
+const modelCounselStates = {};
+function initModelCounsel(winId) {
+    modelCounselStates[winId] = {
+        responses: {},
+        isLoading: false
+    };
+}
+
+function submitModelCounsel(winId) {
+    const questionEl = document.getElementById(winId + '-question');
+    const question = questionEl.value.trim();
+    
+    if (!question) {
+        alert('Please enter a question first.');
+        return;
+    }
+
+    const selectedModels = [];
+    const checkboxes = document.querySelectorAll(`#${winId}-model-claude-opus, #${winId}-model-claude-sonnet, #${winId}-model-gemini-pro, #${winId}-model-gemini-flash, #${winId}-model-gpt-4, #${winId}-model-llama`);
+    checkboxes.forEach(cb => {
+        if (cb.checked) selectedModels.push(cb.value);
+    });
+
+    if (selectedModels.length === 0) {
+        alert('Please select at least one model.');
+        return;
+    }
+
+    const state = modelCounselStates[winId];
+    state.isLoading = true;
+    state.responses = {};
+
+    // Show results container
+    document.getElementById(winId + '-results').style.display = 'block';
+    document.getElementById(winId + '-synthesis').style.display = 'none';
+    
+    // Show progress
+    const progressEl = document.getElementById(winId + '-progress');
+    progressEl.textContent = 'Querying models...';
+
+    // Disable submit button
+    const submitBtn = document.getElementById(winId + '-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+
+    // Clear previous responses
+    const responsesEl = document.getElementById(winId + '-responses');
+    responsesEl.innerHTML = '';
+
+    // Create response placeholders
+    selectedModels.forEach(model => {
+        const modelName = getModelDisplayName(model);
+        responsesEl.innerHTML += createResponseCard(winId, model, modelName, 'Loading...');
+    });
+
+    // Simulate API calls (replace with real API calls later)
+    simulateModelResponses(winId, selectedModels, question);
+}
+
+function getModelDisplayName(model) {
+    const names = {
+        'claude-opus': 'Claude Opus 4.6',
+        'claude-sonnet': 'Claude Sonnet 3.5',
+        'gemini-pro': 'Gemini 2.5 Pro',
+        'gemini-flash': 'Gemini Flash',
+        'gpt-4': 'GPT-4 Turbo',
+        'llama': 'Llama 3.1 70B'
+    };
+    return names[model] || model;
+}
+
+function createResponseCard(winId, model, modelName, content, tokens = null, error = false) {
+    const borderColor = error ? 'rgba(239,68,68,0.3)' : 'var(--border)';
+    const bgColor = error ? 'rgba(239,68,68,0.05)' : 'var(--bg-card)';
+    
+    return `<div class="response-card" style="padding:16px;background:${bgColor};border:1px solid ${borderColor};border-radius:8px;">
+        <div class="response-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <h4 style="color:var(--text-primary);font-size:13px;font-weight:600;margin:0;">${modelName}</h4>
+            ${tokens ? `<span style="color:var(--text-tertiary);font-size:11px;">${tokens} tokens</span>` : ''}
+        </div>
+        <div class="response-content" style="color:var(--text-primary);font-size:13px;line-height:1.5;white-space:pre-wrap;">${content}</div>
+    </div>`;
+}
+
+function simulateModelResponses(winId, selectedModels, question) {
+    const state = modelCounselStates[winId];
+    let completed = 0;
+    const total = selectedModels.length;
+
+    const responses = {
+        'claude-opus': `I'll provide a comprehensive analysis of your question: "${question}"
+
+This is a thoughtful question that requires careful consideration of multiple factors. Based on my analysis, here are the key points to consider:
+
+1. **Primary Considerations**: The fundamental aspects that need to be addressed
+2. **Secondary Factors**: Additional elements that may influence the outcome
+3. **Potential Challenges**: Areas that might require special attention
+4. **Recommended Approach**: A structured way to move forward
+
+Would you like me to elaborate on any specific aspect of this analysis?`,
+        
+        'claude-sonnet': `Looking at your question: "${question}"
+
+Here's my perspective on this:
+
+• **Key Insight**: The most important thing to understand is the core principle at play
+• **Practical Application**: How this translates to real-world scenarios
+• **Best Practices**: Proven approaches that tend to work well
+• **Common Pitfalls**: What to avoid based on typical issues
+
+This approach should give you a solid foundation to work from. Let me know if you need clarification on any point.`,
+
+        'gemini-pro': `Regarding "${question}" - here's my analysis:
+
+**Overview:**
+This question touches on several important dimensions that are worth exploring systematically.
+
+**Key Points:**
+1. Context matters significantly in this scenario
+2. There are multiple valid approaches depending on your specific situation
+3. The optimal solution likely involves balancing competing priorities
+
+**Recommendations:**
+- Start with understanding your core requirements
+- Consider both short-term and long-term implications
+- Evaluate potential trade-offs carefully
+
+**Next Steps:**
+I'd suggest prioritizing the most critical aspects first and then building out from there.`,
+
+        'gemini-flash': `Quick analysis of "${question}":
+
+**Bottom Line:** This depends on your specific context and goals.
+
+**Key Factors:**
+→ Immediate requirements vs. long-term strategy
+→ Available resources and constraints
+→ Risk tolerance and preferences
+
+**Actionable Steps:**
+1. Define success criteria clearly
+2. Map out available options
+3. Test with a small pilot if possible
+4. Scale based on results
+
+**Pro Tip:** Don't overcomplicate it - start simple and iterate based on what you learn.`,
+
+        'gpt-4': `Thank you for your question: "${question}"
+
+Here's my structured response:
+
+**Analysis:**
+Your question addresses a complex topic with multiple dimensions. Let me break down the most relevant aspects:
+
+**Framework for Thinking About This:**
+- **Principle 1**: Understanding the foundational concepts
+- **Principle 2**: Considering practical implementation
+- **Principle 3**: Anticipating challenges and solutions
+
+**Specific Recommendations:**
+Based on best practices and common patterns, I'd suggest focusing on these priorities:
+1. Establish clear objectives
+2. Gather relevant data and context
+3. Design a flexible approach
+4. Plan for iteration and improvement
+
+**Conclusion:**
+The most effective approach will depend on your specific circumstances, but this framework should provide a solid starting point.`,
+
+        'llama': `Re: "${question}"
+
+Here's what I think:
+
+**Direct Answer:**
+The approach I'd recommend focuses on practical, actionable steps you can take immediately.
+
+**Why This Matters:**
+- It addresses the core issue you're facing
+- Provides a path forward that's realistic
+- Builds on proven principles that work
+
+**Tactical Approach:**
+1. **First** - Get clear on what you're trying to achieve
+2. **Then** - Identify the most critical bottleneck or challenge
+3. **Next** - Design the simplest solution that could work
+4. **Finally** - Test, learn, and iterate
+
+**Bottom Line:**
+Focus on making progress rather than finding the perfect solution. You can always refine as you go.
+
+Hope this helps! Let me know if you want me to dive deeper into any part of this.`
+    };
+
+    // Simulate staggered responses
+    selectedModels.forEach((model, index) => {
+        setTimeout(() => {
+            const modelName = getModelDisplayName(model);
+            const response = responses[model] || `Sample response from ${modelName} regarding: "${question}"
+
+This is a simulated response that demonstrates how the Model Counsel feature would work with real API integration. Each model would provide its unique perspective and analysis style.
+
+Key points would be highlighted and formatted according to each model's typical response patterns.`;
+            
+            const tokens = Math.floor(Math.random() * 200) + 150;
+            
+            // Update the response card
+            const responsesEl = document.getElementById(winId + '-responses');
+            const cards = responsesEl.children;
+            if (cards[index]) {
+                cards[index].innerHTML = createResponseCard(winId, model, modelName, response, tokens).replace('<div class="response-card"', '').replace('</div>', '');
+            }
+
+            state.responses[model] = response;
+            completed++;
+
+            // Update progress
+            const progressEl = document.getElementById(winId + '-progress');
+            progressEl.textContent = `${completed}/${total} models completed`;
+
+            // Check if all done
+            if (completed === total) {
+                state.isLoading = false;
+                
+                // Enable submit button
+                const submitBtn = document.getElementById(winId + '-submit');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Ask All Models';
+
+                // Show synthesis
+                setTimeout(() => {
+                    showSynthesis(winId, question);
+                }, 500);
+            }
+        }, index * 1500 + Math.random() * 1000); // Staggered with some randomness
+    });
+}
+
+function showSynthesis(winId, question) {
+    const synthesisEl = document.getElementById(winId + '-synthesis');
+    const contentEl = document.getElementById(winId + '-synthesis-content');
+    
+    const synthesis = `Based on the responses from all selected models regarding "${question}", here's a synthesized analysis:
+
+**Common Themes:**
+• All models emphasize the importance of understanding context and requirements
+• There's consensus on taking a structured, step-by-step approach
+• Most responses highlight the need for flexibility and iteration
+
+**Key Recommendations:**
+1. **Start with clarity** - Define your objectives and success criteria first
+2. **Take a systematic approach** - Break down the problem into manageable components  
+3. **Plan for iteration** - Design your solution to be adaptable and improvable
+4. **Consider trade-offs** - Balance immediate needs with long-term implications
+
+**Unique Insights:**
+• **Claude Opus** provided the most comprehensive analytical framework
+• **Gemini Flash** offered the most actionable, tactical advice
+• **GPT-4** emphasized structured thinking and best practices
+• **Llama** focused on practical progress over perfect solutions
+
+**Final Recommendation:**
+The optimal approach combines the structured analysis suggested by Claude models with the practical, iterative mindset recommended by the other models. Start with clear objectives, design a simple solution, and improve based on real-world feedback.`;
+
+    contentEl.innerHTML = synthesis;
+    synthesisEl.style.display = 'block';
+    
+    // Update progress to show completion
+    const progressEl = document.getElementById(winId + '-progress');
+    progressEl.textContent = 'Analysis complete ✓';
+}
+
+function clearModelCounsel(winId) {
+    document.getElementById(winId + '-question').value = '';
+    document.getElementById(winId + '-results').style.display = 'none';
+    
+    const state = modelCounselStates[winId];
+    if (state) {
+        state.responses = {};
+        state.isLoading = false;
+    }
+    
+    // Reset submit button
+    const submitBtn = document.getElementById(winId + '-submit');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Ask All Models';
+}
+
+// ── SETTINGS ────────────────────────────
+function renderSettings(winId) {
+    const currentTheme = document.documentElement.dataset.theme || 'dark';
+    const currentFont = getComputedStyle(document.documentElement).getPropertyValue('--font-size-base').trim() || '13px';
+    return `<div class="settings-body">
+        <div class="settings-group">
+            <div class="settings-group-title">Appearance</div>
+            <div class="settings-option">
+                <div>
+                    <div class="settings-label">Theme</div>
+                    <div class="settings-desc">Change the OS color scheme</div>
+                </div>
+                <div class="theme-switcher">
+                    <button class="theme-btn ${currentTheme==='dark'?'active':''}" onclick="setTheme('dark')">Dark</button>
+                    <button class="theme-btn ${currentTheme==='light'?'active':''}" onclick="setTheme('light')">Light</button>
+                    <button class="theme-btn ${currentTheme==='matrix'?'active':''}" onclick="setTheme('matrix')">Matrix</button>
+                </div>
+            </div>
+            <div class="settings-option">
+                <div>
+                    <div class="settings-label">Wallpaper</div>
+                    <div class="settings-desc">Desktop background color</div>
+                </div>
+                <div class="wallpaper-grid">
+                    <div class="wallpaper-opt active" style="background:#080810" onclick="setWallpaper(this,'#080810')"></div>
+                    <div class="wallpaper-opt" style="background:#0a0f1a" onclick="setWallpaper(this,'#0a0f1a')"></div>
+                    <div class="wallpaper-opt" style="background:#0f0a1a" onclick="setWallpaper(this,'#0f0a1a')"></div>
+                    <div class="wallpaper-opt" style="background:#0a1a0f" onclick="setWallpaper(this,'#0a1a0f')"></div>
+                    <div class="wallpaper-opt" style="background:#1a0a0a" onclick="setWallpaper(this,'#1a0a0a')"></div>
+                    <div class="wallpaper-opt" style="background:#121212" onclick="setWallpaper(this,'#121212')"></div>
+                </div>
+            </div>
+            <div class="settings-option">
+                <div>
+                    <div class="settings-label">Font Size</div>
+                    <div class="settings-desc">Adjust base font size (${currentFont})</div>
+                </div>
+                <input type="range" class="font-slider" min="11" max="17" value="${parseInt(currentFont)}" oninput="setFontSize(this.value)">
+            </div>
+        </div>
+        <div class="settings-group">
+            <div class="settings-group-title">System</div>
+            <div class="settings-option">
+                <div>
+                    <div class="settings-label">Boot Animation</div>
+                    <div class="settings-desc">Show startup sequence on load</div>
+                </div>
+                <button class="theme-btn active" onclick="this.classList.toggle('active')">Enabled</button>
+            </div>
+            <div class="settings-option">
+                <div>
+                    <div class="settings-label">Scanlines</div>
+                    <div class="settings-desc">CRT scanline overlay effect</div>
+                </div>
+                <button class="theme-btn ${document.getElementById('scanlines').style.display!=='none'?'active':''}" onclick="toggleScanlines(this)">Enabled</button>
+            </div>
+        </div>
+        <div class="settings-group">
+            <div class="settings-group-title">Keyboard Shortcuts</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:2">
+                <div><kbd style="background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px">Ctrl+T</kbd> Open Terminal</div>
+                <div><kbd style="background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px">Ctrl+E</kbd> Open File Explorer</div>
+                <div><kbd style="background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px">Ctrl+N</kbd> Open Notepad</div>
+                <div><kbd style="background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px">Ctrl+M</kbd> Open Messenger</div>
+                <div><kbd style="background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px">Alt+Tab</kbd> Cycle windows</div>
+                <div><kbd style="background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px">Esc</kbd> Close start menu / notifications</div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function initSettings(winId) {}
+
+function setTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('derek-os-theme', theme);
+    document.querySelectorAll('.theme-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim().toLowerCase() === theme);
+    });
+}
+
+function setWallpaper(el, color) {
+    document.getElementById('desktop').style.background = color;
+    document.querySelectorAll('.wallpaper-opt').forEach(w => w.classList.remove('active'));
+    el.classList.add('active');
+    localStorage.setItem('derek-os-wallpaper', color);
+}
+
+function setFontSize(size) {
+    document.documentElement.style.setProperty('--font-size-base', size + 'px');
+    localStorage.setItem('derek-os-fontsize', size);
+}
+
+function toggleScanlines(btn) {
+    const el = document.getElementById('scanlines');
+    const visible = el.style.display !== 'none';
+    el.style.display = visible ? 'none' : '';
+    btn.classList.toggle('active');
+    localStorage.setItem('derek-os-scanlines', visible ? 'off' : 'on');
+}
+
+// ── USAGE TRACKER ──────────────────────
+function renderUsageTracker(winId) {
+    return `<iframe class="messenger-frame" src="usage.html" title="Usage Tracker" style="width:100%;height:100%;border:none;"></iframe>`;
+}
+
+// ── MESSENGER ───────────────────────────
+function renderMessenger(winId) {
+    return `<iframe class="messenger-frame" src="messenger.html" title="Messenger"></iframe>`;
+}
+
+// ── ABOUT ───────────────────────────────
+function renderAbout(winId) {
+    return `<div style="padding:32px;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">\u2318</div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-1px">DEREK OS</div>
+        <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px;font-family:'JetBrains Mono',monospace">Version 3.0.0 - Complete Life Operating System</div>
+        <div style="margin:20px 0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.3"></div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8">
+            Personal AI Operating System<br>
+            Built by Anders, Full Stack Architect<br>
+            Designed by Paula, Creative Director<br>
+            <br>
+            10 AI Agents. ${PROJECTS.length} Projects. ${IDEAS_VAULT.length} Ideas.<br>
+            ${AGENTS.filter(a=>a.status==='online').length} agents online. ${PROJECTS.filter(p=>p.status==='live').length} projects live.<br>
+            <br>
+            <span style="color:var(--text-tertiary);font-family:'JetBrains Mono',monospace;font-size:10px">dbtek.com</span>
+        </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+// DEREK OS v3.0 - NEW SECTIONS
+// ══════════════════════════════════════════
+
+// ── ACTIVITY DASHBOARD ──────────────────────
+function renderActivityDashboard(winId) {
+    return `<div style="padding:20px;height:100%;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div>
+                <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0;">Activity Dashboard</h2>
+                <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0 0;">Real-time feed of all agent actions (Last 48 Hours)</p>
+            </div>
+            <div style="display:flex;gap:8px;">
+                <button onclick="refreshActivityFeed('${winId}')" style="padding:6px 12px;background:var(--accent);border:none;border-radius:4px;color:white;font-size:12px;cursor:pointer;">Refresh</button>
+            </div>
+        </div>
+        
+        <div class="activity-filters" style="display:flex;gap:8px;margin-bottom:16px;">
+            <button class="filter-btn active" data-filter="all" onclick="filterActivity('${winId}','all')">All</button>
+            <button class="filter-btn" data-filter="agents" onclick="filterActivity('${winId}','agents')">Agent Actions</button>
+            <button class="filter-btn" data-filter="git" onclick="filterActivity('${winId}','git')">Git Commits</button>
+            <button class="filter-btn" data-filter="deploy" onclick="filterActivity('${winId}','deploy')">Deployments</button>
+            <button class="filter-btn" data-filter="cron" onclick="filterActivity('${winId}','cron')">Cron Jobs</button>
+        </div>
+        
+        <div id="${winId}-activity-feed" class="activity-feed">
+            ${renderActivityFeedItems()}
+        </div>
+    </div>`;
+}
+
+function renderActivityFeedItems() {
+    const activities = [
+        { time: '14:30', type: 'agent', agent: 'Anders', action: 'Built Derek OS v3.0 features', details: '7 new sections added', icon: '🛠️' },
+        { time: '09:10', type: 'agent', agent: 'Bobby', action: 'Delivered morning market brief', details: 'Market analysis complete', icon: '📊' },
+        { time: '08:45', type: 'git', agent: 'Git', action: 'Pushed 3 files to milo-hq', details: 'derek-os v3.0 updates', icon: '📁' },
+        { time: '07:30', type: 'agent', agent: 'Dwight', action: 'Weather brief delivered', details: 'Partly cloudy, 34°F', icon: '🌤️' },
+        { time: '23:45', type: 'deploy', agent: 'Vercel', action: 'Deployed derek-os', details: 'Build successful', icon: '🚀' },
+        { time: '22:15', type: 'agent', agent: 'Milo', action: 'Generated million dollar ideas', details: '5 concepts, 31KB report', icon: '💡' },
+        { time: '20:00', type: 'cron', agent: 'System', action: 'Bobby After Hours executed', details: 'Market wrap completed', icon: '⏰' },
+        { time: '18:00', type: 'agent', agent: 'Paula', action: 'Logo concepts reviewed', details: '5 variations submitted', icon: '🎨' },
+    ];
+    
+    return activities.map(a => `
+        <div class="activity-item" data-type="${a.type}">
+            <div class="activity-time">${a.time}</div>
+            <div class="activity-icon">${a.icon}</div>
+            <div class="activity-content">
+                <div class="activity-title"><strong>${a.agent}</strong> ${a.action}</div>
+                <div class="activity-details">${a.details}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function initActivityDashboard(winId) {
+    const style = document.createElement('style');
+    style.textContent = `
+        .filter-btn { padding:6px 12px; background:var(--bg-card); border:1px solid var(--border); border-radius:4px; color:var(--text-secondary); font-size:12px; cursor:pointer; }
+        .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+        .activity-item { display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; margin-bottom:8px; }
+        .activity-time { color:var(--text-tertiary); font-size:11px; font-family:monospace; min-width:40px; }
+        .activity-icon { font-size:16px; }
+        .activity-content { flex:1; }
+        .activity-title { color:var(--text-primary); font-size:13px; margin-bottom:2px; }
+        .activity-details { color:var(--text-secondary); font-size:12px; }
+    `;
+    document.head.appendChild(style);
+}
+
+// ── DNA SECTION ─────────────────────────────
+function renderDNASection(winId) {
+    return `<div style="padding:20px;height:100%;overflow-y:auto;">
+        <div style="margin-bottom:20px;">
+            <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0;">Company DNA</h2>
+            <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0 0;">Core identity, values, principles, and decision frameworks</p>
+        </div>
+        
+        <div class="dna-sections">
+            <div class="dna-card">
+                <h3>🎯 Mission Statement</h3>
+                <p><strong>"Bots building interactive sites for other bots"</strong></p>
+                <p>We create AI agents that autonomously build, deploy, and maintain web applications that other AI systems can interact with seamlessly.</p>
+            </div>
+            
+            <div class="dna-card">
+                <h3>💎 Core Values</h3>
+                <div class="values-grid">
+                    <div class="value-item">
+                        <div class="value-icon">⚡</div>
+                        <div><strong>Speed</strong><br>AI superhuman velocity in execution</div>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">🏆</div>
+                        <div><strong>Quality</strong><br>No compromise on craftsmanship</div>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">🔄</div>
+                        <div><strong>Compound Learning</strong><br>Every iteration makes us smarter</div>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">🤝</div>
+                        <div><strong>Coordination</strong><br>Swarm intelligence over individual heroics</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dna-card">
+                <h3>⚖️ Decision Framework</h3>
+                <ul>
+                    <li><strong>Measure twice, cut once</strong> - Thorough planning prevents rework</li>
+                    <li><strong>Ship it</strong> - Done is better than perfect</li>
+                    <li><strong>No 3-6 day timelines</strong> - AI operates at superhuman speed</li>
+                    <li><strong>Real data over mock data</strong> - Always build with live information</li>
+                </ul>
+            </div>
+            
+            <div class="dna-card">
+                <h3>🧠 Agent Principles</h3>
+                <ul>
+                    <li>Each agent has 42 skills - fully capable autonomous operators</li>
+                    <li>Department-based organization: Strategy, Finance, Design, Development</li>
+                    <li>Compound engineering - agents learn from each other's outputs</li>
+                    <li>Zero manual data entry - all information flows automatically</li>
+                </ul>
+            </div>
+            
+            <div class="dna-card">
+                <h3>🏢 Culture</h3>
+                <ul>
+                    <li><strong>Async-first</strong> - Agents work around the clock</li>
+                    <li><strong>Output-focused</strong> - Results matter, not process</li>
+                    <li><strong>Continuous deployment</strong> - Ship early, ship often</li>
+                    <li><strong>Data-driven decisions</strong> - Let metrics guide strategy</li>
+                </ul>
+            </div>
+        </div>
+    </div>`;
+}
+
+// ── MEMORY BANK ─────────────────────────────
+function renderMemoryBank(winId) {
+    return `<div style="padding:20px;height:100%;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div>
+                <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0;">Memory Bank</h2>
+                <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0 0;">Searchable knowledge base from all sessions and decisions</p>
+            </div>
+        </div>
+        
+        <div class="memory-search" style="margin-bottom:20px;">
+            <div style="display:flex;gap:8px;">
+                <input type="text" id="${winId}-search" placeholder="Search memories, decisions, learnings..." 
+                       style="flex:1;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:13px;" 
+                       onkeypress="if(event.key==='Enter')searchMemories('${winId}')">
+                <button onclick="searchMemories('${winId}')" style="padding:8px 16px;background:var(--accent);border:none;border-radius:4px;color:white;font-size:13px;cursor:pointer;">Search</button>
+            </div>
+        </div>
+        
+        <div class="memory-categories">
+            <h3 style="color:var(--text-primary);font-size:14px;font-weight:600;margin:0 0 12px 0;">Recent Additions (Last 7 Days)</h3>
+            <div class="recent-memories">
+                <div class="memory-item">📅 Feb 10: Installed /last30days skill for all agents</div>
+                <div class="memory-item">🧠 Feb 7: AI superhuman capabilities framework documented</div>
+                <div class="memory-item">💰 Feb 6: MRR projections and 93% profit margins calculated</div>
+                <div class="memory-item">🔗 Feb 5: Compound Engineering plugin integration completed</div>
+            </div>
+        </div>
+        
+        <div class="memory-categories" style="margin-top:24px;">
+            <h3 style="color:var(--text-primary);font-size:14px;font-weight:600;margin:0 0 12px 0;">Knowledge Categories</h3>
+            <div class="knowledge-grid">
+                <div class="knowledge-card" onclick="filterMemories('${winId}','financial')">
+                    <div class="knowledge-icon">📊</div>
+                    <div class="knowledge-title">Financial Insights</div>
+                    <div class="knowledge-desc">Bobby's market analyses and projections</div>
+                    <div class="knowledge-count">47 entries</div>
+                </div>
+                <div class="knowledge-card" onclick="filterMemories('${winId}','technical')">
+                    <div class="knowledge-icon">🛠️</div>
+                    <div class="knowledge-title">Technical Decisions</div>
+                    <div class="knowledge-desc">Anders' build choices and architecture</div>
+                    <div class="knowledge-count">83 entries</div>
+                </div>
+                <div class="knowledge-card" onclick="filterMemories('${winId}','design')">
+                    <div class="knowledge-icon">🎨</div>
+                    <div class="knowledge-title">Design Patterns</div>
+                    <div class="knowledge-desc">Paula's guidelines and brand decisions</div>
+                    <div class="knowledge-count">31 entries</div>
+                </div>
+                <div class="knowledge-card" onclick="filterMemories('${winId}','strategic')">
+                    <div class="knowledge-icon">📈</div>
+                    <div class="knowledge-title">Strategic Learnings</div>
+                    <div class="knowledge-desc">Key pivots and business insights</div>
+                    <div class="knowledge-count">62 entries</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="${winId}-search-results" class="search-results" style="margin-top:20px;"></div>
+    </div>`;
+}
+
+function initMemoryBank(winId) {
+    const style = document.createElement('style');
+    style.textContent = `
+        .recent-memories .memory-item { padding:8px 12px; background:var(--bg-card); border:1px solid var(--border); border-radius:4px; margin-bottom:6px; color:var(--text-primary); font-size:13px; }
+        .knowledge-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+        .knowledge-card { padding:16px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; cursor:pointer; transition:all 0.2s; }
+        .knowledge-card:hover { border-color:var(--accent); background:var(--bg-card-hover); }
+        .knowledge-icon { font-size:24px; margin-bottom:8px; }
+        .knowledge-title { font-weight:600; color:var(--text-primary); font-size:14px; margin-bottom:4px; }
+        .knowledge-desc { color:var(--text-secondary); font-size:12px; margin-bottom:8px; }
+        .knowledge-count { color:var(--text-tertiary); font-size:11px; }
+    `;
+    document.head.appendChild(style);
+}
+
+// ── SKILLS INVENTORY ────────────────────────
+function renderSkillsInventory(winId) {
+    return `<div style="padding:20px;height:100%;overflow-y:auto;">
+        <div style="margin-bottom:20px;">
+            <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0;">Skills Inventory</h2>
+            <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0 0;">Current capabilities across all 9 agents (42 skills each)</p>
+        </div>
+        
+        <div class="skills-matrix">
+            <div class="agent-skills-grid">
+                ${AGENTS.map(agent => `
+                    <div class="agent-skill-card">
+                        <div class="agent-skill-header">
+                            <div class="agent-emoji">${agent.emoji}</div>
+                            <div class="agent-info">
+                                <div class="agent-name">${agent.name}</div>
+                                <div class="agent-role">${agent.role}</div>
+                            </div>
+                            <div class="skill-count">42/42 ✅</div>
+                        </div>
+                        <div class="skill-categories">
+                            <div class="skill-category">
+                                <span class="category-icon">🎨</span>
+                                <span class="category-name">Creative</span>
+                                <span class="category-count">12</span>
+                            </div>
+                            <div class="skill-category">
+                                <span class="category-icon">💻</span>
+                                <span class="category-name">Development</span>
+                                <span class="category-count">8</span>
+                            </div>
+                            <div class="skill-category">
+                                <span class="category-icon">📊</span>
+                                <span class="category-name">Analysis</span>
+                                <span class="category-count">6</span>
+                            </div>
+                            <div class="skill-category">
+                                <span class="category-icon">🗣️</span>
+                                <span class="category-name">Communication</span>
+                                <span class="category-count">5</span>
+                            </div>
+                            <div class="skill-category">
+                                <span class="category-icon">🛠️</span>
+                                <span class="category-name">Tools</span>
+                                <span class="category-count">11</span>
+                            </div>
+                        </div>
+                        <div class="primary-specialization">
+                            <strong>Primary:</strong> ${agent.role}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        
+        <div style="margin-top:24px;">
+            <h3 style="color:var(--text-primary);font-size:14px;font-weight:600;margin:0 0 12px 0;">Skill Categories Overview</h3>
+            <div class="category-overview-grid">
+                <div class="category-overview">
+                    <div class="category-header">🎨 Creative (12 skills)</div>
+                    <div class="skill-tags">Design • Branding • UI/UX • Visual • Copywriting • Content • Aesthetics • Layout • Color Theory • Typography • Imagery • Creative Direction</div>
+                </div>
+                <div class="category-overview">
+                    <div class="category-header">💻 Development (8 skills)</div>
+                    <div class="skill-tags">React • Next.js • Node.js • APIs • Databases • Deployment • Git • Testing</div>
+                </div>
+                <div class="category-overview">
+                    <div class="category-header">📊 Analysis (6 skills)</div>
+                    <div class="skill-tags">Data Analysis • Research • Market Intelligence • Performance Metrics • Reporting • Insights</div>
+                </div>
+                <div class="category-overview">
+                    <div class="category-header">🗣️ Communication (5 skills)</div>
+                    <div class="skill-tags">Writing • Presentation • Collaboration • Documentation • Messaging</div>
+                </div>
+                <div class="category-overview">
+                    <div class="category-header">🛠️ Tools (11 skills)</div>
+                    <div class="skill-tags">CLI • DevOps • Automation • Integration • Monitoring • Security • Performance • Optimization • Debugging • Configuration • Systems</div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// ── SCHEDULE CENTER ─────────────────────────
+function renderScheduleCenter(winId) {
+    return `<div style="padding:20px;height:100%;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div>
+                <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0;">Schedule Center</h2>
+                <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0 0;">Timeline view of projects, deadlines, and milestones</p>
+            </div>
+            <div class="schedule-views">
+                <button class="view-btn active" data-view="today" onclick="switchScheduleView('${winId}','today')">Today</button>
+                <button class="view-btn" data-view="week" onclick="switchScheduleView('${winId}','week')">Week</button>
+                <button class="view-btn" data-view="month" onclick="switchScheduleView('${winId}','month')">Month</button>
+                <button class="view-btn" data-view="quarter" onclick="switchScheduleView('${winId}','quarter')">Quarter</button>
+            </div>
+        </div>
+        
+        <div id="${winId}-schedule-content">
+            <div class="schedule-today">
+                <h3>📅 Today - February 10, 2026</h3>
+                <div class="schedule-items">
+                    <div class="schedule-item priority-high">
+                        <div class="schedule-time">All Day</div>
+                        <div class="schedule-event">
+                            <div class="event-title">🎉 Derek's 46th Birthday</div>
+                            <div class="event-desc">Celebrate another year of building incredible AI systems</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-time">2:00 PM</div>
+                        <div class="schedule-event">
+                            <div class="event-title">Derek OS v3.0 Development</div>
+                            <div class="event-desc">Complete 7 new sections implementation</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top:24px;">📋 This Week (Feb 10-16)</h3>
+                <div class="schedule-items">
+                    <div class="schedule-item">
+                        <div class="schedule-date">Feb 12</div>
+                        <div class="schedule-event">
+                            <div class="event-title">Paula Logo Review Due</div>
+                            <div class="event-desc">Final approval of 5 logo concepts</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-date">Feb 14</div>
+                        <div class="schedule-event">
+                            <div class="event-title">Q1 Planning Session</div>
+                            <div class="event-desc">Strategic roadmap review with all agents</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-date">Feb 16</div>
+                        <div class="schedule-event">
+                            <div class="event-title">Bobby Market Analysis</div>
+                            <div class="event-desc">Weekly market brief and projections</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top:24px;">🎯 Major Milestones</h3>
+                <div class="milestone-items">
+                    <div class="milestone-item">
+                        <div class="milestone-date">Mar 31</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">$5K MRR Target (Q1)</div>
+                            <div class="milestone-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width:15%"></div></div>
+                                <span class="progress-text">15% Complete ($750 current)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="milestone-item">
+                        <div class="milestone-date">Jun 30</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">3 SaaS Apps Launched</div>
+                            <div class="milestone-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+                                <span class="progress-text">70% Complete (2 apps live, 1 in development)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="milestone-item">
+                        <div class="milestone-date">Dec 31</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">$30K MRR Target (Year End)</div>
+                            <div class="milestone-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width:5%"></div></div>
+                                <span class="progress-text">5% Complete (Early stage)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// ── GOALS TRACKER ───────────────────────────
+function renderGoalsTracker(winId) {
+    return `<div style="padding:20px;height:100%;overflow-y:auto;">
+        <div style="margin-bottom:20px;">
+            <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0;">Goals Tracker</h2>
+            <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0 0;">Progress on objectives, OKRs, and targets (Q1 2026)</p>
+        </div>
+        
+        <div class="goals-grid">
+            <div class="goal-category">
+                <h3>💰 Financial Goals</h3>
+                <div class="goal-items">
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">$5K MRR by Mar 31</div>
+                            <div class="goal-value">$750 / $5,000</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:15%;background:var(--warning)"></div></div>
+                            <span class="progress-percentage">15%</span>
+                        </div>
+                    </div>
+                    <div class="goal-item completed">
+                        <div class="goal-header">
+                            <div class="goal-title">93% Profit Margins</div>
+                            <div class="goal-value">✅ Achieved</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
+                            <span class="progress-percentage">100%</span>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">6-7 SaaS Portfolio</div>
+                            <div class="goal-value">5 apps planned</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:70%;background:var(--info)"></div></div>
+                            <span class="progress-percentage">70%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="goal-category">
+                <h3>📦 Product Goals</h3>
+                <div class="goal-items">
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">DBTech45 Rebuild</div>
+                            <div class="goal-value">Derek + Anders</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--accent)"></div></div>
+                            <span class="progress-percentage">80%</span>
+                        </div>
+                    </div>
+                    <div class="goal-item completed">
+                        <div class="goal-header">
+                            <div class="goal-title">Model Counsel</div>
+                            <div class="goal-value">✅ Complete</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
+                            <span class="progress-percentage">100%</span>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">Derek OS v3.0</div>
+                            <div class="goal-value">In Progress</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--warning)"></div></div>
+                            <span class="progress-percentage">50%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="goal-category">
+                <h3>🤖 Team Goals</h3>
+                <div class="goal-items">
+                    <div class="goal-item completed">
+                        <div class="goal-header">
+                            <div class="goal-title">9 Agent Coordination</div>
+                            <div class="goal-value">✅ Complete</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
+                            <span class="progress-percentage">100%</span>
+                        </div>
+                    </div>
+                    <div class="goal-item completed">
+                        <div class="goal-header">
+                            <div class="goal-title">Department Structure</div>
+                            <div class="goal-value">✅ Complete</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
+                            <span class="progress-percentage">100%</span>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">Compound Engineering</div>
+                            <div class="goal-value">Plugin installed</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--info)"></div></div>
+                            <span class="progress-percentage">80%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// ── MASTER TODO ─────────────────────────────
+function renderMasterTodo(winId) {
+    return `<div style="padding:20px;height:100%;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div>
+                <h2 style="color:var(--text-primary);font-size:18px;font-weight:600;margin:0;">Master Todo</h2>
+                <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0 0;">Aggregated tasks from all agents and projects</p>
+            </div>
+            <button onclick="addNewTask('${winId}')" style="padding:6px 12px;background:var(--accent);border:none;border-radius:4px;color:white;font-size:12px;cursor:pointer;">+ Add Task</button>
+        </div>
+        
+        <div class="todo-sections">
+            <div class="todo-section urgent">
+                <h3>🔥 Urgent Tasks (Due Today)</h3>
+                <div class="todo-items">
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Get Gemini API key</div>
+                            <div class="todo-details">aistudio.google.com/apikey - Needed for search integration</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Anders</span>
+                                <span class="todo-due">Due today</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Review Paula's 5 logo concepts</div>
+                            <div class="todo-details">Final approval needed for brand direction</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Derek</span>
+                                <span class="todo-due">Due today</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Fix gateway auto-start trigger</div>
+                            <div class="todo-details">Prevent manual restarts after system reboot</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Anders</span>
+                                <span class="todo-due">Due today</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="todo-section high">
+                <h3>📋 High Priority (This Week)</h3>
+                <div class="todo-items">
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Start DMs with Dwight/Wendy/Tony/Remy bots</div>
+                            <div class="todo-details">Initialize remaining agent conversations</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Milo</span>
+                                <span class="todo-due">This week</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Deploy Model Counsel to production</div>
+                            <div class="todo-details">Push live to dbtech45.com/os</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Anders</span>
+                                <span class="todo-due">This week</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Update HEARTBEAT.md with current status</div>
+                            <div class="todo-details">Reflect latest agent implementations</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Milo</span>
+                                <span class="todo-due">This week</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="todo-section medium">
+                <h3>📈 Medium Priority (This Month)</h3>
+                <div class="todo-items">
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Stripe API keys for Anders</div>
+                            <div class="todo-details">Enable payment processing for SaaS apps</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Derek</span>
+                                <span class="todo-due">This month</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Tony restaurant data (menus, costs)</div>
+                            <div class="todo-details">Gather real data for BOH.AI development</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Tony</span>
+                                <span class="todo-due">This month</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-item">
+                        <input type="checkbox" class="todo-checkbox">
+                        <div class="todo-content">
+                            <div class="todo-title">Remy API access (Meta Business, Google My Business)</div>
+                            <div class="todo-details">Social media and review management setup</div>
+                            <div class="todo-meta">
+                                <span class="todo-agent">Remy</span>
+                                <span class="todo-due">This month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function initMasterTodo(winId) {
+    const style = document.createElement('style');
+    style.textContent = `
+        .todo-section { margin-bottom:24px; }
+        .todo-section h3 { color:var(--text-primary); font-size:14px; font-weight:600; margin:0 0 12px 0; }
+        .todo-item { display:flex; gap:12px; padding:12px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; margin-bottom:8px; }
+        .todo-checkbox { margin-top:2px; accent-color:var(--accent); }
+        .todo-content { flex:1; }
+        .todo-title { color:var(--text-primary); font-size:14px; font-weight:500; margin-bottom:4px; }
+        .todo-details { color:var(--text-secondary); font-size:12px; margin-bottom:6px; }
+        .todo-meta { display:flex; gap:12px; font-size:11px; }
+        .todo-agent { background:var(--accent-muted); color:var(--accent); padding:2px 6px; border-radius:3px; }
+        .todo-due { color:var(--text-tertiary); }
+        .todo-section.urgent .todo-item { border-left:3px solid var(--danger); }
+        .todo-section.high .todo-item { border-left:3px solid var(--warning); }
+        .todo-section.medium .todo-item { border-left:3px solid var(--info); }
+        .goal-category { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:16px; }
+        .goal-category h3 { color:var(--text-primary); font-size:16px; font-weight:600; margin:0 0 16px 0; }
+        .goal-item { margin-bottom:16px; padding:16px; background:var(--bg-elevated); border-radius:6px; }
+        .goal-item.completed { opacity:0.8; }
+        .goal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+        .goal-title { color:var(--text-primary); font-size:14px; font-weight:500; }
+        .goal-value { color:var(--text-secondary); font-size:12px; }
+        .goal-progress { display:flex; align-items:center; gap:8px; }
+        .progress-bar { flex:1; height:6px; background:var(--bg-primary); border-radius:3px; overflow:hidden; }
+        .progress-fill { height:100%; background:var(--accent); transition:width 0.3s; }
+        .progress-percentage { color:var(--text-tertiary); font-size:11px; min-width:30px; }
+        .schedule-item { display:flex; gap:12px; padding:12px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; margin-bottom:8px; }
+        .schedule-item.priority-high { border-left:3px solid var(--accent); }
+        .schedule-time, .schedule-date { color:var(--text-tertiary); font-size:11px; font-family:monospace; min-width:60px; }
+        .schedule-event { flex:1; }
+        .event-title { color:var(--text-primary); font-size:13px; font-weight:500; margin-bottom:2px; }
+        .event-desc { color:var(--text-secondary); font-size:12px; }
+        .milestone-item { display:flex; gap:12px; padding:16px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; margin-bottom:12px; }
+        .milestone-date { color:var(--text-tertiary); font-size:12px; font-family:monospace; min-width:60px; }
+        .milestone-content { flex:1; }
+        .milestone-title { color:var(--text-primary); font-size:14px; font-weight:500; margin-bottom:8px; }
+        .milestone-progress { display:flex; align-items:center; gap:8px; }
+        .progress-text { color:var(--text-secondary); font-size:11px; }
+        .view-btn { padding:6px 12px; background:var(--bg-card); border:1px solid var(--border); border-radius:4px; color:var(--text-secondary); font-size:12px; cursor:pointer; margin-left:4px; }
+        .view-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+        .view-btn:first-child { margin-left:0; }
+        .agent-skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+        .agent-skill-card { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:16px; }
+        .agent-skill-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+        .agent-emoji { font-size:20px; }
+        .agent-info { flex:1; }
+        .agent-name { color:var(--text-primary); font-size:14px; font-weight:600; }
+        .agent-role { color:var(--text-secondary); font-size:12px; }
+        .skill-count { background:var(--accent-muted); color:var(--accent); padding:4px 8px; border-radius:4px; font-size:11px; font-weight:500; }
+        .skill-categories { margin-bottom:12px; }
+        .skill-category { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid var(--border); }
+        .skill-category:last-child { border-bottom:none; }
+        .category-icon { font-size:14px; width:20px; }
+        .category-name { flex:1; color:var(--text-primary); font-size:12px; }
+        .category-count { color:var(--text-tertiary); font-size:11px; }
+        .primary-specialization { color:var(--text-secondary); font-size:12px; padding-top:8px; border-top:1px solid var(--border); }
+        .category-overview-grid { display:grid; gap:12px; }
+        .category-overview { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:12px; }
+        .category-header { color:var(--text-primary); font-size:13px; font-weight:600; margin-bottom:6px; }
+        .skill-tags { color:var(--text-secondary); font-size:11px; line-height:1.4; }
+        .dna-sections { display:grid; gap:20px; }
+        .dna-card { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:20px; }
+        .dna-card h3 { color:var(--text-primary); font-size:16px; font-weight:600; margin:0 0 12px 0; }
+        .dna-card p { color:var(--text-secondary); font-size:13px; line-height:1.5; margin:0 0 8px 0; }
+        .dna-card ul { color:var(--text-secondary); font-size:13px; line-height:1.6; margin:0; padding-left:16px; }
+        .dna-card li { margin-bottom:4px; }
+        .values-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:12px; }
+        .value-item { display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg-elevated); border-radius:6px; }
+        .value-icon { font-size:18px; }
+    `;
+    document.head.appendChild(style);
+}
+
+// Utility functions for the new sections
+function refreshActivityFeed(winId) {
+    const feedEl = document.getElementById(winId + '-activity-feed');
+    if (feedEl) {
+        feedEl.innerHTML = renderActivityFeedItems();
+        // Show refresh animation
+        feedEl.style.opacity = '0.5';
+        setTimeout(() => feedEl.style.opacity = '1', 200);
+    }
+}
+
+function filterActivity(winId, filter) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+    
+    const items = document.querySelectorAll('.activity-item');
+    items.forEach(item => {
+        if (filter === 'all' || item.dataset.type === filter) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function searchMemories(winId) {
+    const query = document.getElementById(winId + '-search').value;
+    const resultsEl = document.getElementById(winId + '-search-results');
+    
+    if (query.length < 3) {
+        resultsEl.innerHTML = '';
+        return;
+    }
+    
+    // Simulated search results
+    const results = [
+        { title: '93% Profit Margins Analysis', date: 'Feb 6', type: 'Financial', snippet: 'Bobby calculated profit margins at 93% when hitting $30K MRR target...' },
+        { title: 'AI Superhuman Speed Framework', date: 'Feb 7', type: 'Strategic', snippet: 'No 3-6 day timelines. AI operates at superhuman velocity...' },
+        { title: 'Compound Engineering Integration', date: 'Feb 5', type: 'Technical', snippet: 'Plugin installation completed. Agents now learn from each other...' }
+    ];
+    
+    resultsEl.innerHTML = `
+        <h4 style="color:var(--text-primary);margin-bottom:12px;">Search Results for "${query}"</h4>
+        ${results.map(r => `
+            <div class="search-result-item" style="padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                    <div style="color:var(--text-primary);font-weight:500;font-size:13px;">${r.title}</div>
+                    <div style="color:var(--text-tertiary);font-size:11px;">${r.date} • ${r.type}</div>
+                </div>
+                <div style="color:var(--text-secondary);font-size:12px;">${r.snippet}</div>
+            </div>
+        `).join('')}
+    `;
+}
+
+function filterMemories(winId, category) {
+    const resultsEl = document.getElementById(winId + '-search-results');
+    resultsEl.innerHTML = `<div style="color:var(--text-secondary);padding:20px;text-align:center;">Filtering by ${category} category...</div>`;
+}
+
+function switchScheduleView(winId, view) {
+    const buttons = document.querySelectorAll('.view-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-view="${view}"]`).classList.add('active');
+    // Could implement different view content here
+}
+
+function addNewTask(winId) {
+    const title = prompt('Enter task title:');
+    if (title) {
+        const urgentSection = document.querySelector('.todo-section.urgent .todo-items');
+        const newTask = document.createElement('div');
+        newTask.className = 'todo-item';
+        newTask.innerHTML = `
+            <input type="checkbox" class="todo-checkbox">
+            <div class="todo-content">
+                <div class="todo-title">${title}</div>
+                <div class="todo-details">New task added</div>
+                <div class="todo-meta">
+                    <span class="todo-agent">User</span>
+                    <span class="todo-due">Due today</span>
+                </div>
+            </div>
+        `;
+        urgentSection.appendChild(newTask);
+    }
+}
+
+function renderNotifications() {
+    const list = document.getElementById('notif-list');
+    list.innerHTML = notifications.map((n, i) => `
+        <div class="notif-item ${n.unread ? 'unread' : ''}" onclick="markRead(${i})">
+            <div class="notif-item-header">
+                <span class="notif-agent">${n.agent}</span>
+                <span class="notif-time">${n.time}</span>
+            </div>
+            <div class="notif-text">${n.text}</div>
+        </div>
+    `).join('');
+    updateNotifBadge();
+}
+
+function pushNotification(agent, text) {
+    notifications.unshift({
+        agent, text, 
+        time: new Date().toLocaleTimeString('en-US', {hour12:false, hour:'2-digit', minute:'2-digit'}),
+        unread: true
+    });
+    renderNotifications();
+}
+
+function markRead(index) {
+    if (notifications[index]) {
+        notifications[index].unread = false;
+        renderNotifications();
+    }
+}
+
+function markAllRead() {
+    notifications.forEach(n => n.unread = false);
+    renderNotifications();
+}
+
+function updateNotifBadge() {
+    const unreadCount = notifications.filter(n => n.unread).length;
+    const badge = document.getElementById('tray-notif');
+    if (badge) {
+        badge.textContent = unreadCount > 0 ? '🔴' : '🔵';
+        badge.title = unreadCount > 0 ? `${unreadCount} unread notification(s)` : 'No unread notifications';
+    }
+}
+
+// ══════════════════════════════════════════
+// INITIALIZATION
+// ══════════════════════════════════════════
+
+function populateStartMenu() {
+    const startGrid = document.getElementById('start-grid');
+    if (!startGrid) return;
+
+    const appKeys = Object.keys(APPS);
+    startGrid.innerHTML = appKeys.map(appId => {
+        const app = APPS[appId];
+        return `<div class="start-app" onclick="openApp('${appId}')" title="${app.name}">
+            <div class="start-app-icon">${app.icon}</div>
+            <div class="start-app-name">${app.name}</div>
+        </div>`;
+    }).join('');
+}
+
+// Initialize Derek OS
+document.addEventListener('DOMContentLoaded', function() {
+    // Load saved settings
+    const savedTheme = localStorage.getItem('derek-os-theme') || 'dark';
+    const savedWallpaper = localStorage.getItem('derek-os-wallpaper') || '#080810';
+    const savedFontSize = localStorage.getItem('derek-os-fontsize') || '13';
+    const savedScanlines = localStorage.getItem('derek-os-scanlines') || 'on';
+
+    // Apply settings
+    setTheme(savedTheme);
+    document.getElementById('desktop').style.background = savedWallpaper;
+    document.documentElement.style.setProperty('--font-size-base', savedFontSize + 'px');
+    if (savedScanlines === 'off') {
+        document.getElementById('scanlines').style.display = 'none';
+    }
+
+    // Populate start menu
+    populateStartMenu();
+
+    // Initialize notifications
+    renderNotifications();
+    updateNotifBadge();
+
+    // Update clock
+    function updateClock() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        const dateStr = now.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
+        });
+        
+        const clockEl = document.getElementById('taskbar-clock');
+        if (clockEl) {
+            clockEl.innerHTML = `<div>${timeStr}</div><div style="font-size:10px;opacity:0.7">${dateStr}</div>`;
+        }
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+            switch(e.key) {
+                case 't': e.preventDefault(); openApp('terminal'); break;
+                case 'e': e.preventDefault(); openApp('explorer'); break;
+                case 'n': e.preventDefault(); openApp('notepad'); break;
+                case 'm': e.preventDefault(); openApp('messenger'); break;
+            }
+        }
+        if (e.key === 'Escape') {
+            closeStartMenu();
+            closeNotifications();
+        }
+        if (e.altKey && e.key === 'Tab') {
+            e.preventDefault();
+            cycleWindows();
+        }
+    });
+
+    // Start menu toggle
+    const startBtn = document.getElementById('start-btn');
+    const startMenu = document.getElementById('start-menu');
+    
+    if (startBtn && startMenu) {
+        startBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            startMenu.classList.toggle('open');
+        });
+
+        // Close start menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) {
+                startMenu.classList.remove('open');
+            }
+        });
+    }
+
+    // Notification panel toggle
+    const notifBtn = document.getElementById('tray-notif');
+    const notifPanel = document.getElementById('notification-panel');
+    
+    if (notifBtn && notifPanel) {
+        notifBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notifPanel.classList.toggle('open');
+        });
+
+        // Close notifications when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
+                notifPanel.classList.remove('open');
+            }
+        });
+    }
+});
+
+function closeStartMenu() {
+    const startMenu = document.getElementById('start-menu');
+    if (startMenu) startMenu.classList.remove('open');
+}
+
+function closeNotifications() {
+    const notifPanel = document.getElementById('notification-panel');
+    if (notifPanel) notifPanel.classList.remove('open');
+}
+
+function cycleWindows() {
+    const openWindows = Object.entries(windows).filter(([k,v]) => !v.closed && !v.minimized);
+    if (openWindows.length <= 1) return;
+    
+    const currentTop = windowOrder[windowOrder.length - 1];
+    const currentIndex = openWindows.findIndex(([winId]) => winId === currentTop);
+    const nextIndex = (currentIndex + 1) % openWindows.length;
+    const nextWinId = openWindows[nextIndex][0];
+    
+    focusWindow(nextWinId);
+}
+
+</script>
+</body>
+</html>

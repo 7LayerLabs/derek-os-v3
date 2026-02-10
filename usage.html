@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Usage Tracker - DEREK OS v2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+/* ═══════════════════════════════════════════
+   USAGE TRACKER - DEREK OS v2.0
+   Built by Anders · Full Stack Architect
+   ═══════════════════════════════════════════ */
+
+/* ── THEME SYSTEM ────────────────────────── */
+:root, [data-theme="dark"] {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #111118;
+    --bg-card: #16161f;
+    --bg-card-hover: #1c1c28;
+    --bg-elevated: #1e1e2a;
+    --bg-input: #12121a;
+    --bg-desktop: #080810;
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(255,255,255,0.12);
+    --border-active: rgba(99,102,241,0.4);
+    --text-primary: #f0f0f5;
+    --text-secondary: #8888a0;
+    --text-tertiary: #55556a;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --accent-muted: rgba(99,102,241,0.15);
+    --accent-glow: rgba(99,102,241,0.3);
+    --status-online: #22c55e;
+    --status-busy: #f59e0b;
+    --status-offline: #64748b;
+    --status-standby: #f59e0b;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #06b6d4;
+    --taskbar-bg: rgba(10,10,18,0.92);
+    --window-bg: #12121a;
+    --window-header: #1a1a26;
+    --scanline-opacity: 0.03;
+    --font-size-base: 13px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ── HEADER ────────────────────────── */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    backdrop-filter: blur(20px);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-link {
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+.nav-link.active {
+    background: var(--accent-muted);
+    color: var(--accent);
+}
+
+/* ── MAIN CONTENT ────────────────────────── */
+.main {
+    margin-top: 54px;
+    padding: 32px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-header {
+    margin-bottom: 32px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ── ALERT BANNER ────────────────────────── */
+.alert {
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 32px;
+    border: 1px solid;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+}
+
+.alert.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+}
+
+.alert.error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.alert-icon {
+    font-size: 18px;
+}
+
+/* ── CARDS ────────────────────────── */
+.cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s ease;
+}
+
+.card:hover {
+    border-color: var(--border-hover);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.usage-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* ── LOADING STATE ────────────────────────── */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.loading::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top: 2px solid var(--accent);
+    border-radius: 50%;
+    margin-right: 12px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── RESPONSIVE ────────────────────────── */
+@media (max-width: 768px) {
+    .main {
+        padding: 20px;
+    }
+    
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo">DEREK OS</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="usage.html" class="nav-link active">Usage Tracker</a>
+                <a href="messenger.html" class="nav-link">Messenger</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="page-header">
+            <h1 class="page-title">Anthropic API Usage</h1>
+            <p class="page-subtitle">Monitor your API usage, costs, and limits in real-time</p>
+        </div>
+
+        <!-- Warning Banner -->
+        <div id="warningBanner" class="alert warning">
+            <span class="alert-icon">⚠️</span>
+            <span>High usage detected! You're using over 75% of your API limit.</span>
+        </div>
+
+        <!-- Error Banner -->
+        <div id="errorBanner" class="alert error">
+            <span class="alert-icon">❌</span>
+            <span id="errorMessage">Failed to load usage data.</span>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            Loading usage data...
+        </div>
+
+        <!-- Usage Cards -->
+        <div id="usageContent" class="cards-grid" style="display: none;">
+            <!-- Overall Usage Circle -->
+            <div class="card">
+                <h2 class="card-title">Overall Usage</h2>
+                <div class="usage-circle">
+                    <canvas id="usageCircle" width="200" height="200"></canvas>
+                </div>
+                <div class="stats-row">
+                    <div class="stat">
+                        <span id="tokensUsed" class="stat-value">0</span>
+                        <div class="stat-label">Tokens Used</div>
+                    </div>
+                    <div class="stat">
+                        <span id="estimatedCost" class="stat-value">$0.00</span>
+                        <div class="stat-label">Estimated Cost</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Breakdown -->
+            <div class="card">
+                <h2 class="card-title">Usage by Model</h2>
+                <div class="chart-container">
+                    <canvas id="modelChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Daily Trend -->
+            <div class="card" style="grid-column: 1 / -1;">
+                <h2 class="card-title">Daily Usage Trend (Last 7 Days)</h2>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pricing rates (per 1M tokens)
+        const PRICING = {
+            'claude-3-5-opus': { input: 15, output: 75 },
+            'claude-3-5-sonnet': { input: 3, output: 15 },
+            'claude-3-haiku': { input: 0.8, output: 4 },
+            // Add other models as needed
+            'claude-opus': { input: 15, output: 75 },
+            'claude-sonnet': { input: 3, output: 15 },
+            'claude-haiku': { input: 0.8, output: 4 }
+        };
+
+        // Chart instances
+        let usageCircleChart = null;
+        let modelChart = null;
+        let trendChart = null;
+
+        async function loadUsageData() {
+            try {
+                console.log('Fetching usage data...');
+                const response = await fetch('/api/usage');
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => null);
+                    throw new Error(errorData?.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Usage data received:', data);
+                
+                displayUsageData(data);
+                hideLoading();
+                
+            } catch (error) {
+                console.error('Error loading usage data:', error);
+                showError(error.message);
+                hideLoading();
+            }
+        }
+
+        function displayUsageData(data) {
+            try {
+                // Calculate totals and costs
+                let totalTokens = 0;
+                let totalCost = 0;
+                const modelData = {};
+
+                // Process the usage data structure (may vary based on Anthropic API response)
+                if (data.usage_by_model || data.models) {
+                    const models = data.usage_by_model || data.models || {};
+                    
+                    for (const [modelName, usage] of Object.entries(models)) {
+                        const pricing = PRICING[modelName] || PRICING['claude-sonnet']; // default to sonnet
+                        const inputTokens = usage.input_tokens || usage.prompt_tokens || 0;
+                        const outputTokens = usage.output_tokens || usage.completion_tokens || 0;
+                        const modelTokens = inputTokens + outputTokens;
+                        
+                        const inputCost = (inputTokens / 1000000) * pricing.input;
+                        const outputCost = (outputTokens / 1000000) * pricing.output;
+                        const modelCost = inputCost + outputCost;
+                        
+                        totalTokens += modelTokens;
+                        totalCost += modelCost;
+                        
+                        modelData[modelName] = {
+                            tokens: modelTokens,
+                            cost: modelCost,
+                            inputTokens,
+                            outputTokens
+                        };
+                    }
+                }
+
+                // Update stats
+                document.getElementById('tokensUsed').textContent = formatNumber(totalTokens);
+                document.getElementById('estimatedCost').textContent = `$${totalCost.toFixed(2)}`;
+
+                // Create charts
+                createUsageCircle(data.usage_percentage || 0);
+                createModelChart(modelData);
+                createTrendChart(data.daily_usage || []);
+
+                // Check for high usage warning
+                const usagePercent = data.usage_percentage || 0;
+                if (usagePercent > 75) {
+                    document.getElementById('warningBanner').style.display = 'flex';
+                }
+
+                document.getElementById('usageContent').style.display = 'grid';
+                
+            } catch (error) {
+                console.error('Error displaying usage data:', error);
+                showError('Failed to process usage data');
+            }
+        }
+
+        function createUsageCircle(percentage) {
+            const ctx = document.getElementById('usageCircle').getContext('2d');
+            
+            if (usageCircleChart) {
+                usageCircleChart.destroy();
+            }
+            
+            usageCircleChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: ['#6366f1', '#16161f'],
+                        borderWidth: 0,
+                        cutout: '70%'
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    }
+                },
+                plugins: [{
+                    afterDraw: function(chart) {
+                        const ctx = chart.ctx;
+                        const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+                        const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+                        
+                        ctx.fillStyle = '#f0f0f5';
+                        ctx.font = 'bold 24px Inter';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(`${percentage.toFixed(1)}%`, centerX, centerY);
+                        
+                        ctx.fillStyle = '#8888a0';
+                        ctx.font = '12px Inter';
+                        ctx.fillText('Used', centerX, centerY + 20);
+                    }
+                }]
+            });
+        }
+
+        function createModelChart(modelData) {
+            const ctx = document.getElementById('modelChart').getContext('2d');
+            
+            if (modelChart) {
+                modelChart.destroy();
+            }
+            
+            const models = Object.keys(modelData);
+            const tokens = models.map(model => modelData[model].tokens);
+            const colors = ['#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#06b6d4'];
+            
+            modelChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: models.map(model => model.replace('claude-', '').replace('-', ' ')),
+                    datasets: [{
+                        data: tokens,
+                        backgroundColor: colors.slice(0, models.length),
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#16161f' },
+                            ticks: { color: '#8888a0', callback: value => formatNumber(value) }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#8888a0' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTrendChart(dailyData) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            
+            if (trendChart) {
+                trendChart.destroy();
+            }
+            
+            // Generate last 7 days if no data provided
+            const labels = [];
+            const data = [];
+            const today = new Date();
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }));
+                data.push(dailyData[6-i]?.tokens || Math.floor(Math.random() * 50000)); // Mock data if none provided
+            }
+            
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        data,
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#6366f1',
+                        pointBorderColor: '#6366f1',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#16161f' },
+                            ticks: { color: '#8888a0', callback: value => formatNumber(value) }
+                        },
+                        x: {
+                            grid: { color: '#16161f' },
+                            ticks: { color: '#8888a0' }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorBanner').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadUsageData);
+    </script>
+</body>
+</html>

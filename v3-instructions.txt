@@ -1,0 +1,33 @@
+Transform Derek OS into v3.0 Complete Life Operating System by adding 7 new sections with full functionality.
+
+ADD TO APPS OBJECT (around line 1129):
+activity: { name:'Activity Dashboard', icon:'📊', width:800, height:600 },
+dna: { name:'DNA Section', icon:'🧬', width:700, height:500 },
+memory: { name:'Memory Bank', icon:'🧠', width:900, height:650 },
+skills: { name:'Skills Inventory', icon:'🛠️', width:750, height:550 },
+schedule: { name:'Schedule Center', icon:'⏰', width:850, height:600 },
+goals: { name:'Goals Tracker', icon:'🎯', width:800, height:550 },
+todo: { name:'Master Todo', icon:'📋', width:700, height:600 }
+
+CREATE 7 NEW RENDER FUNCTIONS:
+
+1. renderActivityDashboard(winId) - Real-time feed of agent actions, git commits, deployments
+2. renderDNASection(winId) - Company mission, values, principles, culture  
+3. renderMemoryBank(winId) - Searchable knowledge base with categories
+4. renderSkillsInventory(winId) - 9 agents x 42 skills matrix
+5. renderScheduleCenter(winId) - Timeline views with real deadlines
+6. renderGoalsTracker(winId) - Progress bars for MRR and product goals
+7. renderMasterTodo(winId) - Task management with priority levels
+
+UPDATE renderAppContent() function (around line 1216) to handle all 7 new cases:
+case 'activity': body.innerHTML = renderActivityDashboard(winId); break;
+case 'dna': body.innerHTML = renderDNASection(winId); break;
+case 'memory': body.innerHTML = renderMemoryBank(winId); break;
+case 'skills': body.innerHTML = renderSkillsInventory(winId); break;
+case 'schedule': body.innerHTML = renderScheduleCenter(winId); break;
+case 'goals': body.innerHTML = renderGoalsTracker(winId); break;
+case 'todo': body.innerHTML = renderMasterTodo(winId); break;
+
+STYLING: Use consistent dark theme, proper spacing, responsive design matching existing Derek OS aesthetic.
+
+DATA: Use real information from AGENTS, PROJECTS arrays and create realistic sample data.
