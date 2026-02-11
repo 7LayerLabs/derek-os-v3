@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Counsel - Multi-AI Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f17;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .model-card {
+            background: #1a1b26;
+            border: 1px solid #2a2d3a;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .model-card.active {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .model-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .model-status {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-ready {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-loading {
+            background: rgba(251, 146, 60, 0.2);
+            color: #fb923c;
+        }
+
+        .model-description {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .model-specs {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .chat-interface {
+            background: #1a1b26;
+            border: 1px solid #2a2d3a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .chat-header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #2a2d3a;
+        }
+
+        .selected-model {
+            font-size: 16px;
+            font-weight: 600;
+            color: #22c55e;
+        }
+
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #16172a;
+            border-radius: 8px;
+            border: 1px solid #2a2d3a;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background: #3b82f6;
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.assistant {
+            background: #22c55e;
+            color: white;
+        }
+
+        .message.error {
+            background: #ef4444;
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 12px 16px;
+            background: #16172a;
+            border: 1px solid #2a2d3a;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 14px;
+            resize: none;
+            min-height: 60px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .send-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .send-button:hover {
+            background: #2563eb;
+        }
+
+        .send-button:disabled {
+            background: #374151;
+            cursor: not-allowed;
+        }
+
+        .api-setup {
+            background: #1a1b26;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .api-setup h3 {
+            color: #f59e0b;
+            margin-bottom: 16px;
+        }
+
+        .api-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .api-input {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .api-input label {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .api-input input {
+            padding: 10px 12px;
+            background: #16172a;
+            border: 1px solid #2a2d3a;
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .api-input input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .save-button {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            justify-self: start;
+        }
+
+        .response-time {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Model Counsel</h1>
+            <p>Multi-AI interface with Claude, GPT, Gemini, and Llama models</p>
+        </div>
+
+        <!-- API Setup -->
+        <div class="api-setup" id="apiSetup">
+            <h3>⚠️ API Configuration Required</h3>
+            <div class="api-form">
+                <div class="api-input">
+                    <label for="anthropicKey">Anthropic API Key</label>
+                    <input type="password" id="anthropicKey" placeholder="sk-ant-api03-...">
+                </div>
+                <div class="api-input">
+                    <label for="openaiKey">OpenAI API Key</label>
+                    <input type="password" id="openaiKey" placeholder="sk-proj-...">
+                </div>
+                <div class="api-input">
+                    <label for="googleKey">Google AI API Key</label>
+                    <input type="password" id="googleKey" placeholder="AI...">
+                </div>
+                <div class="api-input">
+                    <label for="groqKey">Groq API Key</label>
+                    <input type="password" id="groqKey" placeholder="gsk_...">
+                </div>
+                <button class="save-button" onclick="saveApiKeys()">Save API Keys</button>
+            </div>
+        </div>
+
+        <!-- Models Grid -->
+        <div class="models-grid">
+            <div class="model-card" data-model="claude-opus-4.6" onclick="selectModel(this)">
+                <div class="model-header">
+                    <div class="model-name">Claude Opus 4.6</div>
+                    <div class="model-status status-error" id="claude-status">API Key Required</div>
+                </div>
+                <div class="model-description">
+                    Most capable model. Exceptional at analysis, creative writing, and complex reasoning.
+                </div>
+                <div class="model-specs">
+                    <span>200K context</span>
+                    <span>Advanced reasoning</span>
+                </div>
+            </div>
+
+            <div class="model-card" data-model="claude-sonnet-4.5" onclick="selectModel(this)">
+                <div class="model-header">
+                    <div class="model-name">Claude Sonnet 4.5</div>
+                    <div class="model-status status-error" id="sonnet-status">API Key Required</div>
+                </div>
+                <div class="model-description">
+                    Balanced performance and speed. Great for most tasks with strong reasoning.
+                </div>
+                <div class="model-specs">
+                    <span>200K context</span>
+                    <span>Fast response</span>
+                </div>
+            </div>
+
+            <div class="model-card" data-model="gpt-4-turbo" onclick="selectModel(this)">
+                <div class="model-header">
+                    <div class="model-name">GPT-4 Turbo</div>
+                    <div class="model-status status-error" id="gpt4-status">API Key Required</div>
+                </div>
+                <div class="model-description">
+                    OpenAI's flagship model. Excellent at code, analysis, and general tasks.
+                </div>
+                <div class="model-specs">
+                    <span>128K context</span>
+                    <span>Code generation</span>
+                </div>
+            </div>
+
+            <div class="model-card" data-model="gemini-2.5-pro" onclick="selectModel(this)">
+                <div class="model-header">
+                    <div class="model-name">Gemini 2.5 Pro</div>
+                    <div class="model-status status-error" id="gemini-status">API Key Required</div>
+                </div>
+                <div class="model-description">
+                    Google's advanced model. Strong at reasoning and multimodal tasks.
+                </div>
+                <div class="model-specs">
+                    <span>1M context</span>
+                    <span>Multimodal</span>
+                </div>
+            </div>
+
+            <div class="model-card" data-model="gemini-2.5-flash" onclick="selectModel(this)">
+                <div class="model-header">
+                    <div class="model-name">Gemini 2.5 Flash</div>
+                    <div class="model-status status-error" id="flash-status">API Key Required</div>
+                </div>
+                <div class="model-description">
+                    High-speed version of Gemini. Fast responses with good quality.
+                </div>
+                <div class="model-specs">
+                    <span>1M context</span>
+                    <span>Very fast</span>
+                </div>
+            </div>
+
+            <div class="model-card" data-model="llama-3.3-70b" onclick="selectModel(this)">
+                <div class="model-header">
+                    <div class="model-name">Llama 3.3 70B</div>
+                    <div class="model-status status-error" id="llama-status">API Key Required</div>
+                </div>
+                <div class="model-description">
+                    Meta's open-source model. Good performance with fast inference via Groq.
+                </div>
+                <div class="model-specs">
+                    <span>128K context</span>
+                    <span>Open source</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="chat-interface">
+            <div class="chat-header">
+                <div class="selected-model" id="selectedModel">Select a model to start chatting</div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div style="text-align: center; color: #64748b; padding: 40px;">
+                    Configure your API keys and select a model to begin
+                </div>
+            </div>
+            <div class="chat-input">
+                <textarea class="input-field" id="messageInput" placeholder="Type your message..." disabled></textarea>
+                <button class="send-button" id="sendButton" onclick="sendMessage()" disabled>Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedModel = null;
+        let apiKeys = {};
+
+        function saveApiKeys() {
+            const anthropic = document.getElementById('anthropicKey').value;
+            const openai = document.getElementById('openaiKey').value;
+            const google = document.getElementById('googleKey').value;
+            const groq = document.getElementById('groqKey').value;
+
+            apiKeys = {
+                anthropic: anthropic,
+                openai: openai,
+                google: google,
+                groq: groq
+            };
+
+            // Store in localStorage (in production, this should be handled securely)
+            localStorage.setItem('modelCounselKeys', JSON.stringify(apiKeys));
+
+            // Update model statuses
+            updateModelStatuses();
+
+            // Hide API setup if all keys are provided
+            if (anthropic && openai && google && groq) {
+                document.getElementById('apiSetup').style.display = 'none';
+            }
+        }
+
+        function updateModelStatuses() {
+            const updates = [
+                { id: 'claude-status', key: 'anthropic' },
+                { id: 'sonnet-status', key: 'anthropic' },
+                { id: 'gpt4-status', key: 'openai' },
+                { id: 'gemini-status', key: 'google' },
+                { id: 'flash-status', key: 'google' },
+                { id: 'llama-status', key: 'groq' }
+            ];
+
+            updates.forEach(update => {
+                const element = document.getElementById(update.id);
+                if (apiKeys[update.key]) {
+                    element.textContent = 'Ready';
+                    element.className = 'model-status status-ready';
+                } else {
+                    element.textContent = 'API Key Required';
+                    element.className = 'model-status status-error';
+                }
+            });
+        }
+
+        function selectModel(element) {
+            // Remove active class from all cards
+            document.querySelectorAll('.model-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            // Add active class to selected card
+            element.classList.add('active');
+
+            selectedModel = element.dataset.model;
+            document.getElementById('selectedModel').textContent = `Selected: ${element.querySelector('.model-name').textContent}`;
+            
+            // Enable input and send button
+            document.getElementById('messageInput').disabled = false;
+            document.getElementById('sendButton').disabled = false;
+
+            // Clear messages
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.innerHTML = `<div style="text-align: center; color: #64748b; padding: 20px;">Ready to chat with ${element.querySelector('.model-name').textContent}</div>`;
+        }
+
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message || !selectedModel) return;
+
+            const messagesDiv = document.getElementById('chatMessages');
+            
+            // Add user message
+            messagesDiv.innerHTML += `
+                <div class="message user">${message}</div>
+            `;
+
+            // Clear input
+            messageInput.value = '';
+
+            // Show loading
+            const loadingId = 'loading-' + Date.now();
+            messagesDiv.innerHTML += `
+                <div class="message assistant" id="${loadingId}">
+                    <div style="opacity: 0.7;">Thinking...</div>
+                </div>
+            `;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            const startTime = Date.now();
+
+            try {
+                // In a real implementation, this would call your backend API
+                // For now, we'll simulate a response
+                await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+                
+                const responses = {
+                    'claude-opus-4.6': 'This is a simulated response from Claude Opus 4.6. In production, this would connect to the Anthropic API.',
+                    'claude-sonnet-4.5': 'This is a simulated response from Claude Sonnet 4.5. The actual implementation would use your Anthropic API key.',
+                    'gpt-4-turbo': 'This is a simulated response from GPT-4 Turbo. Production version would call OpenAI API.',
+                    'gemini-2.5-pro': 'This is a simulated response from Gemini 2.5 Pro. Real version would use Google AI API.',
+                    'gemini-2.5-flash': 'This is a simulated response from Gemini 2.5 Flash. Fast response simulation.',
+                    'llama-3.3-70b': 'This is a simulated response from Llama 3.3 70B via Groq. Very fast inference simulation.'
+                };
+
+                const responseTime = Date.now() - startTime;
+                
+                // Update loading message with response
+                const loadingElement = document.getElementById(loadingId);
+                loadingElement.innerHTML = `
+                    ${responses[selectedModel] || 'Model response would appear here.'}
+                    <div class="response-time">Response time: ${responseTime}ms</div>
+                `;
+
+            } catch (error) {
+                // Show error
+                const loadingElement = document.getElementById(loadingId);
+                loadingElement.className = 'message error';
+                loadingElement.innerHTML = `Error: ${error.message}`;
+            }
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Enter to send
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Load saved API keys
+        window.addEventListener('load', function() {
+            const saved = localStorage.getItem('modelCounselKeys');
+            if (saved) {
+                apiKeys = JSON.parse(saved);
+                document.getElementById('anthropicKey').value = apiKeys.anthropic || '';
+                document.getElementById('openaiKey').value = apiKeys.openai || '';
+                document.getElementById('googleKey').value = apiKeys.google || '';
+                document.getElementById('groqKey').value = apiKeys.groq || '';
+                updateModelStatuses();
+
+                // Hide API setup if keys exist
+                if (Object.values(apiKeys).some(key => key)) {
+                    document.getElementById('apiSetup').style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
