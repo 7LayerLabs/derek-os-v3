@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Tech OS - Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Same styles as rs.html but optimized for deployment */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f17;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .main-interface {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left-sidebar {
+            width: 240px;
+            background: #1a1b26;
+            border-right: 1px solid #2a2d3a;
+            padding: 20px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 30px;
+            border-bottom: 1px solid #2a2d3a;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #3b82f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .nav-item {
+            padding: 8px 20px;
+            margin: 2px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-right: 2px solid #3b82f6;
+        }
+
+        .nav-item[onclick] {
+            cursor: pointer;
+        }
+
+        .nav-item[onclick]:hover {
+            background: rgba(59, 130, 246, 0.12);
+            color: #3b82f6;
+        }
+
+        .nav-badge {
+            background: #3b82f6;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            flex: 1;
+            padding: 20px 30px;
+            transition: margin-right 0.3s ease;
+        }
+
+        .main-content.sidebar-open {
+            margin-right: 400px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .sidebar-toggle {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-toggle:hover {
+            background: #2563eb;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .welcome-message h2 {
+            color: #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: #16172a;
+            border: 1px solid #2a2d3a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .feature-card h3 {
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* Right Sidebar - Same as before */
+        .right-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: #1a1b26;
+            border-left: 1px solid #2a2d3a;
+            transition: right 0.3s ease;
+            z-index: 200;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .right-sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #2a2d3a;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #e2e8f0;
+        }
+
+        .dashboard-card {
+            background: #16172a;
+            border: 1px solid #2a2d3a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .dashboard-card:hover {
+            border-color: #3b82f6;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            font-size: 18px;
+            margin-right: 8px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(42, 45, 58, 0.5);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .metric-value {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .status-online { color: #22c55e; }
+        .status-warning { color: #f59e0b; }
+        .status-info { color: #3b82f6; }
+        .placeholder { color: #f59e0b; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="main-interface">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="logo">
+                <div class="logo-icon">DB</div>
+                <div class="logo-text">
+                    <div>DB TECH OS</div>
+                    <div style="font-size: 11px; color: #64748b;">COMMAND CENTER</div>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                🔥 Model Counsel
+            </div>
+            <div class="nav-item">
+                🔷 Projects <span class="nav-badge">28</span>
+            </div>
+            <div class="nav-item">
+                📈 Markets
+            </div>
+            <div class="nav-item">
+                📰 Daily Feed
+            </div>
+            
+            <div style="padding: 16px 20px; color: #64748b; font-size: 11px; font-weight: 600; text-transform: uppercase;">
+                TOOLS
+            </div>
+            
+            <div class="nav-item">
+                🔗 Quick Links
+            </div>
+            <div class="nav-item">
+                📋 Kanban
+            </div>
+            <div class="nav-item">
+                💡 Ideas Vault
+            </div>
+            <div class="nav-item" onclick="window.open('https://7layerlabs.github.io/dbtech45-agent-icons-v3/DBTECH45-BRAND-KIT.html', '_blank')">
+                🎨 Brand Kit
+            </div>
+            <div class="nav-item" onclick="window.open('https://7layerlabs.github.io/dbtech45-agent-icons-v3/brand-spec.html', '_blank')">
+                📐 Brand Spec
+            </div>
+            
+            <div style="padding: 16px 20px; color: #64748b; font-size: 11px; font-weight: 600; text-transform: uppercase;">
+                OPERATIONS
+            </div>
+            
+            <div class="nav-item">
+                📊 Activity Dashboard
+            </div>
+            <div class="nav-item">
+                🧬 DNA
+            </div>
+            <div class="nav-item">
+                🧠 Memory Bank
+            </div>
+            <div class="nav-item">
+                🛠️ Skills Inventory
+            </div>
+            <div class="nav-item">
+                ⏰ Schedule Center
+            </div>
+            <div class="nav-item">
+                🎯 Goals Tracker
+            </div>
+            <div class="nav-item active">
+                📋 Master Todo
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="content-header">
+                <div>
+                    <div class="page-title">DB Tech OS Command Center</div>
+                    <div class="page-subtitle">Complete operational control interface</div>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    ⚡ Derek OS V3
+                </button>
+            </div>
+
+            <div class="welcome-message">
+                <h2>Welcome to DB Tech OS</h2>
+                <p>Your complete operational command center. Navigate using the sidebar or access Derek OS V3 dashboard.</p>
+                
+                <div class="feature-list">
+                    <div class="feature-card">
+                        <h3>🎨 Brand Kit</h3>
+                        <p>Vendor-ready brand assets for print shops and designers</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📐 Brand Spec</h3>
+                        <p>Complete design system reference and guidelines</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>⚡ Derek OS V3</h3>
+                        <p>Advanced operational dashboard with real-time metrics</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔷 Projects</h3>
+                        <p>Track and manage all active development projects</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar (Derek OS V3) -->
+        <div class="right-sidebar" id="rightSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Derek OS V3</div>
+                <button class="close-btn" id="closeSidebar">✕</button>
+            </div>
+
+            <!-- Activity Dashboard -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">Activity Dashboard</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Last Commit</span>
+                    <span class="metric-value placeholder">Focus block for Market Dashboard refresh</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Active Sessions</span>
+                    <span class="metric-value status-online">5 agents online</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Current Task</span>
+                    <span class="metric-value status-info">Derek OS V3 rollout</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">System Load</span>
+                    <span class="metric-value status-warning">78%</span>
+                </div>
+            </div>
+
+            <!-- Goals Tracker -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Goals Tracker</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Monthly Revenue</span>
+                    <span class="metric-value placeholder">$---,---</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Sunday Squares</span>
+                    <span class="metric-value status-warning">95% complete</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">dbtech45 Rebuild</span>
+                    <span class="metric-value status-online">Deployed</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Agent Count</span>
+                    <span class="metric-value">12 active</span>
+                </div>
+            </div>
+
+            <!-- Memory Bank -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-title">Memory Bank</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Recent Context</span>
+                    <span class="metric-value placeholder">DB Tech OS V3 rollout</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Key Decisions</span>
+                    <span class="metric-value placeholder">24 logged this week</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Knowledge Base</span>
+                    <span class="metric-value">4.2GB indexed</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Search Ready</span>
+                    <span class="metric-value status-online">Online</span>
+                </div>
+            </div>
+
+            <!-- Skills Inventory -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">🛠️</div>
+                    <div class="card-title">Skills Inventory</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">React/Next.js</span>
+                    <span class="metric-value">Anders, Paula</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Trading/Finance</span>
+                    <span class="metric-value">Bobby, Tony</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Strategy/Ops</span>
+                    <span class="metric-value">Milo, Derek</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Total Skills</span>
+                    <span class="metric-value placeholder">47 active</span>
+                </div>
+            </div>
+
+            <!-- Schedule Center -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-title">Schedule Center</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Next Milestone</span>
+                    <span class="metric-value placeholder">Sunday Squares launch prep</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Deadline</span>
+                    <span class="metric-value status-warning">Feb 16, 2026</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Calendar Sync</span>
+                    <span class="metric-value status-online">Connected</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Time Zone</span>
+                    <span class="metric-value">EST (UTC-5)</span>
+                </div>
+            </div>
+
+            <!-- Master Todo V3 -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">📋</div>
+                    <div class="card-title">Master Todo V3</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">High Priority</span>
+                    <span class="metric-value placeholder">Deploy DB Tech OS V3 sidebar</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Medium Priority</span>
+                    <span class="metric-value placeholder">Sunday Squares launch prep</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Low Priority</span>
+                    <span class="metric-value placeholder">Agent memory optimization</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Completed Today</span>
+                    <span class="metric-value status-online">8 tasks</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const rightSidebar = document.getElementById('rightSidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const mainContent = document.getElementById('mainContent');
+
+        function openSidebar() {
+            rightSidebar.classList.add('open');
+            mainContent.classList.add('sidebar-open');
+            sidebarToggle.innerHTML = '⚡ Close V3';
+        }
+
+        function closeSidebarFunc() {
+            rightSidebar.classList.remove('open');
+            mainContent.classList.remove('sidebar-open');
+            sidebarToggle.innerHTML = '⚡ Derek OS V3';
+        }
+
+        sidebarToggle.addEventListener('click', () => {
+            if (rightSidebar.classList.contains('open')) {
+                closeSidebarFunc();
+            } else {
+                openSidebar();
+            }
+        });
+
+        closeSidebar.addEventListener('click', closeSidebarFunc);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSidebarFunc();
+            }
+        });
+    </script>
+</body>
+</html>

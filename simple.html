@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derek OS V3 - Preview</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #f0f0f5;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 48px;
+            margin: 0;
+            background: linear-gradient(135deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #16161f;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 24px;
+            min-height: 300px;
+        }
+        .card h2 {
+            margin: 0 0 20px 0;
+            font-size: 20px;
+            color: #00ff88;
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .metric:last-child {
+            border-bottom: none;
+        }
+        .placeholder {
+            color: #f59e0b;
+            font-style: italic;
+        }
+        .status-online { color: #22c55e; }
+        .status-busy { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DEREK OS V3</h1>
+            <p>Complete Life Operating System - Dashboard Preview</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>📊 Activity Dashboard</h2>
+                <div class="metric">
+                    <span>Last Commit</span>
+                    <span class="placeholder">Focus block for Market Dashboard refresh</span>
+                </div>
+                <div class="metric">
+                    <span>Active Sessions</span>
+                    <span class="status-online">5 agents online</span>
+                </div>
+                <div class="metric">
+                    <span>Current Task</span>
+                    <span class="placeholder">Derek OS V3 rollout</span>
+                </div>
+                <div class="metric">
+                    <span>System Load</span>
+                    <span class="status-busy">78%</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🎯 Goals Tracker</h2>
+                <div class="metric">
+                    <span>Monthly Revenue</span>
+                    <span class="placeholder">$---,---</span>
+                </div>
+                <div class="metric">
+                    <span>Sunday Squares</span>
+                    <span class="status-busy">95% complete</span>
+                </div>
+                <div class="metric">
+                    <span>dbtech45 Rebuild</span>
+                    <span class="status-online">Deployed</span>
+                </div>
+                <div class="metric">
+                    <span>Agent Count</span>
+                    <span>12 active</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🧠 Memory Bank</h2>
+                <div class="metric">
+                    <span>Recent Context</span>
+                    <span class="placeholder">DB Tech OS V3 rollout</span>
+                </div>
+                <div class="metric">
+                    <span>Key Decisions</span>
+                    <span class="placeholder">24 logged this week</span>
+                </div>
+                <div class="metric">
+                    <span>Knowledge Base</span>
+                    <span>4.2GB indexed</span>
+                </div>
+                <div class="metric">
+                    <span>Search Ready</span>
+                    <span class="status-online">Online</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🛠️ Skills Inventory</h2>
+                <div class="metric">
+                    <span>React/Next.js</span>
+                    <span>Anders, Paula</span>
+                </div>
+                <div class="metric">
+                    <span>Trading/Finance</span>
+                    <span>Bobby, Tony</span>
+                </div>
+                <div class="metric">
+                    <span>Strategy/Ops</span>
+                    <span>Milo, Derek</span>
+                </div>
+                <div class="metric">
+                    <span>Total Skills</span>
+                    <span class="placeholder">47 active</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📋 Master Todo</h2>
+                <div class="metric">
+                    <span>High Priority</span>
+                    <span class="placeholder">Deploy DB Tech OS V3 sidebar</span>
+                </div>
+                <div class="metric">
+                    <span>Medium Priority</span>
+                    <span class="placeholder">Sunday Squares launch prep</span>
+                </div>
+                <div class="metric">
+                    <span>Low Priority</span>
+                    <span class="placeholder">Agent memory optimization</span>
+                </div>
+                <div class="metric">
+                    <span>Completed Today</span>
+                    <span class="status-online">8 tasks</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>⏰ Schedule Center</h2>
+                <div class="metric">
+                    <span>Next Milestone</span>
+                    <span class="placeholder">Sunday Squares launch prep</span>
+                </div>
+                <div class="metric">
+                    <span>Deadline</span>
+                    <span class="status-busy">Feb 16, 2026</span>
+                </div>
+                <div class="metric">
+                    <span>Calendar Sync</span>
+                    <span class="status-online">Connected</span>
+                </div>
+                <div class="metric">
+                    <span>Time Zone</span>
+                    <span>EST (UTC-5)</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center; color: #666;">
+            <p><strong>PLACEHOLDER DATA</strong> - Items in <span class="placeholder">yellow</span> need real data integration</p>
+            <p>Built by Anders • Version 3.0 • February 2026</p>
+        </div>
+    </div>
+</body>
+</html>
